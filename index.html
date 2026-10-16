@@ -61,28 +61,41 @@
             });
         }
 
-        form.addEventListener("submit", function(event) {
-            event.preventDefault();
+        form.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-            const record = {
-                name: document.getElementById("name").value.trim(),
-                phone: document.getElementById("phone").value.trim(),
-                item: document.getElementById("item").value
-            };
+    const record = {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        item: document.getElementById("item").value
+    };
 
-            records.push(record);
+    message.textContent = "正在送出登記，請稍候……";
 
-            localStorage.setItem(
-                "registrationRecords",
-                JSON.stringify(records)
-            );
-
-            showRecords();
-            message.textContent = "登記成功！資料已保存。";
-            form.reset();
+    try {
+        await fetch("https://script.google.com/macros/s/AKfycbw6ihiGCwRz5niGQnnZKwj5AsHTO9fm2rqO11ewLpLoIWP9bCBIOnxgWG-QThD5VRSO/exec", {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(record)
         });
 
+        records.push(record);
+        localStorage.setItem(
+            "registrationRecords",
+            JSON.stringify(records)
+        );
+
         showRecords();
+        message.textContent = "已送出登記！請稍後確認資料是否寫入試算表。";
+        form.reset();
+
+    } catch (error) {
+        message.textContent = "送出時發生錯誤，請稍後再試。";
+    }
+});
     </script>
 </body>
 
