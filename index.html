@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>線上登記系統</title>
+</head>
+<body>
+    <h1>線上登記表</h1>
+
+    <form id="registrationForm">
+        <p>
+            <label for="name">姓名：</label>
+            <input type="text" id="name" required>
+        </p>
+
+        <p>
+            <label for="phone">聯絡電話：</label>
+            <input type="tel" id="phone" required>
+        </p>
+
+        <p>
+            <label for="item">登記項目：</label>
+            <select id="item" required>
+                <option value="">請選擇</option>
+                <option value="項目A">項目 A</option>
+                <option value="項目B">項目 B</option>
+                <option value="項目C">項目 C</option>
+            </select>
+        </p>
+
+        <button type="submit">送出登記</button>
+    </form>
+
+    <p id="message"></p>
+
+    <h2>登記紀錄</h2>
+    <ul id="recordList"></ul>
+
+    <script>
+        const form = document.getElementById("registrationForm");
+        const message = document.getElementById("message");
+        const recordList = document.getElementById("recordList");
+
+        let records = JSON.parse(
+            localStorage.getItem("registrationRecords") || "[]"
+        );
+
+        function showRecords() {
+            recordList.innerHTML = "";
+
+            records.forEach(function(record) {
+                const li = document.createElement("li");
+                li.textContent =
+                    record.name + "｜" +
+                    record.phone + "｜" +
+                    record.item;
+
+                recordList.appendChild(li);
+            });
+        }
+
+        form.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const record = {
+                name: document.getElementById("name").value.trim(),
+                phone: document.getElementById("phone").value.trim(),
+                item: document.getElementById("item").value
+            };
+
+            records.push(record);
+
+            localStorage.setItem(
+                "registrationRecords",
+                JSON.stringify(records)
+            );
+
+            showRecords();
+            message.textContent = "登記成功！資料已保存。";
+            form.reset();
+        });
+
+        showRecords();
+    </script>
+</body>
+
+    <style>
+        body {
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f3f6fb;
+            color: #333;
+        }
+
+        h1, h2 {
+            color: #2457a7;
+        }
+
+        form {
+            background-color: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px #00000012;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, select {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2457a7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #183e7c;
+        }
+
+        #message {
+            color: #16803c;
+            font-weight: bold;
+        }
+
+        #recordList {
+            background-color: white;
+            padding: 20px 20px 20px 40px;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                margin: 12px auto;
+                padding: 12px;
+            }
+        }
+    </style>
+
+</html>
