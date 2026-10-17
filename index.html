@@ -250,7 +250,23 @@
 
 <body>
     <h1>三德精舍 法會牌位登記表</h1>
+<!-- 修改登記資料區域 -->
+<div id="editSection">
+  <h2>修改登記資料</h2>
 
+  <label for="searchPhone">請輸入聯絡電話：</label>
+  <input
+    type="tel"
+    id="searchPhone"
+    placeholder="請輸入登記時的電話"
+  >
+
+  <button type="button" id="searchButton">
+    查詢登記資料
+  </button>
+
+  <div id="searchResults"></div>
+</div>
     <form id="registrationForm">
         
 <div class="field">
@@ -667,6 +683,61 @@ citySelect.addEventListener("change", function () {
         });
 
         showRecords();
+        document.getElementById("searchButton").addEventListener("click", function () {
+    const phone = document.getElementById("searchPhone").value.trim();
+    const resultsDiv = document.getElementById("searchResults");
+
+    if (!phone) {
+        resultsDiv.textContent = "請先輸入聯絡電話。";
+        return;
+    }
+
+    resultsDiv.textContent = "查詢中，請稍候……";
+
+    const callbackName = "searchCallback_" + Date.now();
+
+    window[callbackName] = function (data) {
+        resultsDiv.innerHTML = "";
+        delete window[callbackName];
+
+        if (!data.success || data.results.length === 0) {
+            resultsDiv.textContent = "查無資料，請確認聯絡電話是否正確。";
+            return;
+        }
+
+        data.results.forEach(function (item) {
+            const record = document.createElement("div");
+            record.style.border = "1px solid #ccc";
+            record.style.padding = "12px";
+            record.style.marginTop = "10px";
+
+            const values = item.values;
+            const info = document.createElement("p");
+            info.textContent =
+                "姓名：" + values[1] +
+                "｜電話：" + values[2] +
+                "｜流水號：" + values[4] +
+                "｜牌位類別：" + values[7];
+
+            record.appendChild(info);
+            resultsDiv.appendChild(record);
+        });
+    };
+
+    const script = document.createElement("script");
+    script.src =
+        "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec" +
+        "?action=search&phone=" + encodeURIComponent(phone) +
+        "&callback=" + callbackName;
+
+    script.onerror = function () {
+        resultsDiv.textContent = "查詢失敗，請稍後再試。";
+        delete window[callbackName];
+        script.remove();
+    };
+
+    document.body.appendChild(script);
+});
     </script>
 </body>
 </html>
