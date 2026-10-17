@@ -268,7 +268,13 @@
   <div id="searchResults"></div>
   <div id="editForm" style="display:none; margin-top:20px;">
   <h3>編輯登記資料</h3>
-
+<label for="editAdminPassword">管理密碼</label>
+<input
+  type="password"
+  id="editAdminPassword"
+  placeholder="請輸入管理密碼"
+  autocomplete="current-password"
+>
   <input type="hidden" id="editRowNumber">
 
   <label>姓名</label>
@@ -806,6 +812,7 @@ document.getElementById("saveEditButton").addEventListener("click", async functi
 
     const data = {
         action: "update",
+        adminPassword: document.getElementById("editAdminPassword").value,
         rowNumber: rowNumber,
         name: document.getElementById("editName").value.trim(),
         phone: phone,
