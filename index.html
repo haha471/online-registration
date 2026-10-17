@@ -266,6 +266,41 @@
   </button>
 
   <div id="searchResults"></div>
+  <div id="editForm" style="display:none; margin-top:20px;">
+  <h3>編輯登記資料</h3>
+
+  <input type="hidden" id="editRowNumber">
+
+  <label>姓名</label>
+  <input type="text" id="editName">
+
+  <label>聯絡電話</label>
+  <input type="tel" id="editPhone">
+
+  <label>登記項目</label>
+  <input type="text" id="editItem">
+
+  <label>流水號</label>
+  <input type="text" id="editSerial">
+
+  <label>消災姓名</label>
+  <input type="text" id="editDisasterName">
+
+  <label>地址</label>
+  <input type="text" id="editAddress">
+
+  <label>牌位類別</label>
+  <select id="editTabletCategory">
+    <option value="">請選擇</option>
+    <option value="大牌位">大牌位</option>
+    <option value="中牌位">中牌位</option>
+    <option value="小牌位">小牌位</option>
+    <option value="全家小牌位">全家小牌位</option>
+  </select>
+
+  <button type="button" id="saveEditButton">儲存修改</button>
+  <button type="button" id="cancelEditButton">取消</button>
+</div>
 </div>
     <form id="registrationForm">
         
@@ -720,7 +755,29 @@ citySelect.addEventListener("change", function () {
                 "｜牌位類別：" + values[7];
 
             record.appendChild(info);
-            resultsDiv.appendChild(record);
+
+const editButton = document.createElement("button");
+editButton.type = "button";
+editButton.textContent = "修改";
+editButton.addEventListener("click", function () {
+    document.getElementById("editRowNumber").value = item.rowNumber;
+    document.getElementById("editName").value = values[1];
+    document.getElementById("editPhone").value = values[2];
+    document.getElementById("editItem").value = values[3];
+    document.getElementById("editSerial").value = values[4];
+    document.getElementById("editDisasterName").value = values[5];
+    document.getElementById("editAddress").value = values[6];
+    document.getElementById("editTabletCategory").value = values[7];
+
+    document.getElementById("editForm").style.display = "block";
+    document.getElementById("editForm").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+});
+
+record.appendChild(editButton);
+resultsDiv.appendChild(record);
         });
     };
 
@@ -737,6 +794,58 @@ citySelect.addEventListener("change", function () {
     };
 
     document.body.appendChild(script);
+});
+document.getElementById("saveEditButton").addEventListener("click", async function () {
+    const rowNumber = Number(document.getElementById("editRowNumber").value);
+    const phone = document.getElementById("editPhone").value.trim();
+
+    if (!rowNumber || !phone) {
+        alert("請確認資料列與聯絡電話已填寫。");
+        return;
+    }
+
+    const data = {
+        action: "update",
+        rowNumber: rowNumber,
+        name: document.getElementById("editName").value.trim(),
+        phone: phone,
+        item: document.getElementById("editItem").value.trim(),
+        disasterName: document.getElementById("editDisasterName").value.trim(),
+        address: document.getElementById("editAddress").value.trim(),
+        tabletCategory: document.getElementById("editTabletCategory").value
+    };
+
+    if (!confirm("確定要儲存這筆資料的修改嗎？")) {
+        return;
+    }
+
+    const button = document.getElementById("saveEditButton");
+    button.disabled = true;
+
+    try {
+        await fetch(
+            "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec",
+            {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(data)
+            }
+        );
+
+        alert("修改資料已送出，請到 Google 試算表確認是否更新成功。");
+        document.getElementById("editForm").style.display = "none";
+    } catch (error) {
+        alert("送出失敗，請檢查網路連線後再試。");
+    } finally {
+        button.disabled = false;
+    }
+});
+
+document.getElementById("cancelEditButton").addEventListener("click", function () {
+    document.getElementById("editForm").style.display = "none";
 });
     </script>
 </body>
