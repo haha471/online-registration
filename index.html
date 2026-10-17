@@ -252,6 +252,32 @@
     <h1>三德精舍 法會牌位登記表</h1>
 
     <form id="registrationForm">
+        
+<div class="field">
+    <label>牌位類別：（請擇一）</label>
+    <div class="category-options">
+        <label>
+            <input type="radio" name="tabletCategory" value="大牌位" required>
+            大牌位
+        </label>
+
+        <label>
+            <input type="radio" name="tabletCategory" value="中牌位">
+            中牌位
+        </label>
+
+        <label>
+            <input type="radio" name="tabletCategory" value="小牌位">
+            小牌位
+        </label>
+
+        <label>
+            <input type="radio" name="tabletCategory" value="全家小牌位">
+            全家小牌位
+        </label>
+    </div>
+</div>
+
 
 <div class="contact-row">
     <div class="field">
@@ -585,6 +611,7 @@ citySelect.addEventListener("change", function () {
 
             const record = {
                 name: document.getElementById("name").value.trim(),
+                tabletCategory: document.querySelector('input[name="tabletCategory"]:checked').value,
                 phone: document.getElementById("phone").value.trim(),
                 address: [
     document.getElementById("city").value,
