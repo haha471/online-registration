@@ -1397,31 +1397,57 @@ document.addEventListener("input", function (event) {
     if (event.target.closest("#salvationItems")) updateSalvationTotalCount();
 });
 
+// 消災數量改以「不同住址」計算；同一住址有多位姓名只算一戶。
 function updateDisasterNameCount() {
-    const nameInputs = document.querySelectorAll(
-        '#disasterNames input[name="disasterName"]'
-    );
+    const rows = document.querySelectorAll("#disasterNames .name-row");
+    const uniqueAddresses = new Set();
 
-    let count = 0;
+    const mainAddress = [
+        citySelect.value,
+        districtSelect.value,
+        detailAddressInput.value.trim()
+    ].filter(Boolean).join("").replace(/\\s+/g, "").toLowerCase();
 
-    nameInputs.forEach(function (input) {
-        if (input.value.trim() !== "") {
-            count++;
+    rows.forEach(function (row) {
+        const nameInput = row.querySelector('input[name="disasterName"]');
+        if (!nameInput || nameInput.value.trim() === "") return;
+
+        const selectedType = row.querySelector('input[type="radio"]:checked');
+        if (!selectedType) return;
+
+        let address = "";
+        if (selectedType.value === "main") {
+            address = mainAddress;
+        } else {
+            const otherAddressInput = row.querySelector(".other-address-input");
+            address = otherAddressInput
+                ? otherAddressInput.value.trim().replace(/\\s+/g, "").toLowerCase()
+                : "";
         }
+
+        // 沒有填寫住址時不計入，避免空白地址被當成一戶。
+        if (address) uniqueAddresses.add(address);
     });
 
+    const count = uniqueAddresses.size;
     const countDisplay = document.getElementById("disasterNameCount");
 
     if (countDisplay) {
-        countDisplay.innerHTML = '<span class="disaster-count-label">消災姓名數量</span>' +
+        countDisplay.innerHTML = '<span class="disaster-count-label">消災住址數量</span>' +
             '<span class="disaster-count-value">' + count + '</span>' +
-            '<span class="disaster-count-unit">位</span>';
+            '<span class="disaster-count-unit">戶</span>';
     }
 }
+
 document.getElementById("disasterNames").addEventListener("input", function (event) {
-    if (event.target.name === "disasterName") {
+    if (event.target.name === "disasterName" ||
+        event.target.classList.contains("other-address-input")) {
         updateDisasterNameCount();
     }
+});
+
+document.getElementById("disasterNames").addEventListener("change", function (event) {
+    if (event.target.type === "radio") updateDisasterNameCount();
 });
 
 updateDisasterNameCount();
@@ -1608,6 +1634,11 @@ document.querySelectorAll('.minor-address-list').forEach(function (list) {
 citySelect.addEventListener("change", updateMainAddressDisplay);
 districtSelect.addEventListener("change", updateMainAddressDisplay);
 detailAddressInput.addEventListener("input", updateMainAddressDisplay);
+
+// 主要住址有變動時，同步更新消災不同住址數量。
+citySelect.addEventListener("change", updateDisasterNameCount);
+districtSelect.addEventListener("change", updateDisasterNameCount);
+detailAddressInput.addEventListener("input", updateDisasterNameCount);
 
 updateMainAddressDisplay();
 
@@ -1870,202 +1901,4 @@ input.focus();
                 phone: document.getElementById("phone").value.trim(),
                 address: [
     document.getElementById("city").value,
-    document.getElementById("district").value,
-    document.getElementById("detailAddress").value.trim()
-].filter(Boolean).join(""),
-                disasterNames: selectedMajorItems.includes("消災") ? names : [],
-                item: itemDetails.join("；")
-            };
-
-            message.textContent = "正在送出登記，請稍候……";
-
-            try {
-                await fetch(scriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: {
-                        "Content-Type": "text/plain;charset=utf-8"
-                    },
-                    body: JSON.stringify(record)
-                });
-
-                records.push(record);
-                localStorage.setItem(
-                    "registrationRecords",
-                    JSON.stringify(records)
-                );
-
-                showRecords();
-                message.textContent =
-                    "登記資料已送出。請再確認 Google 試算表是否收到資料。";
-
-                form.reset();
-                districtSelect.innerHTML = '<option value="">請先選擇縣市</option>';
-                districtSelect.disabled = true;
-                groundDistrictSelect.innerHTML = '<option value="">請先選擇縣市</option>';
-                groundDistrictSelect.disabled = true;
-
-                disasterNames.innerHTML = `
-<div class="name-row">
-    <span class="name-number">1.</span>
-    <input class="text-input" type="text" name="disasterName" placeholder="請輸入姓名">
-    <div class="disaster-address-options">
-        <label>
-            <input type="radio" name="disasterAddressType_0" value="main" checked>
-            同主要住址
-        </label>
-        <div class="main-address-display">尚未填寫主要住址</div>
-        <label>
-            <input type="radio" name="disasterAddressType_0" value="other">
-            其他住址
-        </label>
-        <input class="text-input other-address-input" type="text" placeholder="請輸入其他住址" style="display: none;">
-    </div>
-</div>
-                `;
-                salvationItems.style.display = "none";
-                updateMainAddressDisplay();
-                updateDisasterNameNumbers();
-                updateDisasterNameCount();
-                syncAllOptionControls();
-
-            } catch (error) {
-                message.textContent =
-                    "無法送出資料，請檢查網路連線後再試。";
-            }
-        });
-
-        showRecords();
-        document.getElementById("searchButton").addEventListener("click", function () {
-    const phone = document.getElementById("searchPhone").value.trim();
-    const resultsDiv = document.getElementById("searchResults");
-
-    if (!phone) {
-        resultsDiv.textContent = "請先輸入聯絡電話。";
-        return;
-    }
-
-    resultsDiv.textContent = "查詢中，請稍候……";
-
-    const callbackName = "searchCallback_" + Date.now();
-
-    window[callbackName] = function (data) {
-        resultsDiv.innerHTML = "";
-        delete window[callbackName];
-
-        if (!data.success || data.results.length === 0) {
-            resultsDiv.textContent = "查無資料，請確認聯絡電話是否正確。";
-            return;
-        }
-
-        data.results.forEach(function (item) {
-            const record = document.createElement("div");
-            record.style.border = "1px solid #ccc";
-            record.style.padding = "12px";
-            record.style.marginTop = "10px";
-
-            const values = item.values;
-            const info = document.createElement("p");
-            info.textContent =
-                "姓名：" + values[1] +
-                "｜電話：" + values[2] +
-                "｜流水號：" + values[4] +
-                "｜牌位類別：" + values[7];
-
-            record.appendChild(info);
-
-const editButton = document.createElement("button");
-editButton.type = "button";
-editButton.textContent = "修改";
-editButton.addEventListener("click", function () {
-    document.getElementById("editRowNumber").value = item.rowNumber;
-    document.getElementById("editName").value = values[1];
-    document.getElementById("editPhone").value = values[2];
-    document.getElementById("editItem").value = values[3];
-    document.getElementById("editSerial").value = values[4];
-    document.getElementById("editDisasterName").value = values[5];
-    document.getElementById("editAddress").value = values[6];
-    document.getElementById("editTabletCategory").value = values[7];
-
-    document.getElementById("editForm").style.display = "block";
-    document.getElementById("editForm").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-});
-
-record.appendChild(editButton);
-resultsDiv.appendChild(record);
-        });
-    };
-
-    const script = document.createElement("script");
-    script.src =
-        "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec" +
-        "?action=search&phone=" + encodeURIComponent(phone) +
-        "&callback=" + callbackName;
-
-    script.onerror = function () {
-        resultsDiv.textContent = "查詢失敗，請稍後再試。";
-        delete window[callbackName];
-        script.remove();
-    };
-
-    document.body.appendChild(script);
-});
-document.getElementById("saveEditButton").addEventListener("click", async function () {
-    const rowNumber = Number(document.getElementById("editRowNumber").value);
-    const phone = document.getElementById("editPhone").value.trim();
-
-    if (!rowNumber || !phone) {
-        alert("請確認資料列與聯絡電話已填寫。");
-        return;
-    }
-
-    const data = {
-        action: "update",
-        adminPassword: document.getElementById("editAdminPassword").value,
-        rowNumber: rowNumber,
-        name: document.getElementById("editName").value.trim(),
-        phone: phone,
-        item: document.getElementById("editItem").value.trim(),
-        disasterName: document.getElementById("editDisasterName").value.trim(),
-        address: document.getElementById("editAddress").value.trim(),
-        tabletCategory: document.getElementById("editTabletCategory").value
-    };
-
-    if (!confirm("確定要儲存這筆資料的修改嗎？")) {
-        return;
-    }
-
-    const button = document.getElementById("saveEditButton");
-    button.disabled = true;
-
-    try {
-        await fetch(
-            "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec",
-            {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify(data)
-            }
-        );
-
-        alert("修改資料已送出，請到 Google 試算表確認是否更新成功。");
-        document.getElementById("editForm").style.display = "none";
-    } catch (error) {
-        alert("送出失敗，請檢查網路連線後再試。");
-    } finally {
-        button.disabled = false;
-    }
-});
-
-document.getElementById("cancelEditButton").addEventListener("click", function () {
-    document.getElementById("editForm").style.display = "none";
-});
-    </script>
-</body>
-</html>
+    docu
