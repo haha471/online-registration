@@ -28,6 +28,15 @@
 
         h1 {
             font-size: 26px;
+            line-height: 1.35;
+        }
+
+        h1 span {
+            display: block;
+        }
+
+        h1 span + span {
+            margin-top: 2px;
         }
 
         form, #recordList {
@@ -40,6 +49,22 @@
         .field {
             margin-bottom: 18px;
         }
+        .address-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.address-group label {
+    white-space: nowrap;
+}
+
+.address-group select {
+    width: auto;
+    flex: 1;
+    min-width: 120px;
+}
 
         .field > label,
         .section-title {
@@ -55,7 +80,33 @@
             border-radius: 6px;
             font-size: 16px;
         }
+.detail-address-input {
+    width: 100%;
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 12px;
+}
 
+.address-group .detail-address-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.address-group .detail-address-row label {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    margin: 0;
+}
+
+.address-group .detail-address-row .detail-address-input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    box-sizing: border-box;
+}
 
 .major-items {
     display: flex;
@@ -76,12 +127,66 @@
 
 
         .major-option {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 12px;
             white-space: nowrap;
             font-weight: bold;
             cursor: pointer;
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #9bb6d8;
+            border-radius: 12px;
+            background: #f7faff;
+            color: #1f3f68;
+            font-size: 20px;
+            line-height: 1.4;
+            transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .major-option:hover {
+            border-color: #2457a7;
+            background: #edf4ff;
+        }
+
+        /* 勾選消災／超薦後，以明顯底色、粗框與狀態標籤提示 */
+        .major-option:has(input:checked) {
+            border: 3px solid #174f9c;
+            background: #e3efff;
+            color: #123d78;
+            box-shadow: 0 0 0 3px #2457a71c;
+        }
+
+        .major-option:has(input:checked)::after {
+            content: "已勾選";
+            margin-left: auto;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: #174f9c;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .03em;
+        }
+
+        .major-option input {
+            width: 26px;
+            height: 26px;
+            accent-color: #174f9c;
+            flex: 0 0 26px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 480px) {
+            .major-option {
+                padding: 12px;
+                font-size: 18px;
+            }
+            .major-option input {
+                width: 24px;
+                height: 24px;
+                flex-basis: 24px;
+            }
         }
 
         .major-option input,
@@ -111,11 +216,58 @@
             gap: 8px;
         }
 
-        .name-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+
+
+.name-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    width: 100%;
+    margin-bottom: 24px;
+    padding: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+    min-height: 220px;
+}
+
+
+.name-row > input.text-input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.disaster-address-options {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 4px;
+}
+
+
+.disaster-address-options label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.main-address-display,
+.other-address-input {
+    width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+}
+
+.name-row .remove-button {
+    align-self: flex-end;
+}
+
 
         .name-row .text-input {
             min-width: 0;
@@ -244,15 +396,822 @@
         gap: 10px;
     }
 }
+.contact-address-section {
+    border: 2px solid #9bbad0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #eef6fc;
+}
+.contact-address-section .section-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 20px;
+    color: #333;
+}
 
-    </style>
+
+        /* 超薦項目：統一間距與輸入框寬度 */
+        .minor-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .minor-item {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 10px;
+            padding: 16px;
+            border: 2px solid #8fa8bd;
+            border-left: 6px solid #567b9b;
+            border-radius: 9px;
+            background: #f8fbfd;
+            box-shadow: 0 1px 3px rgba(35, 58, 78, 0.08);
+        }
+
+        .salvation-total-count {
+            margin: 4px 0 0;
+            padding: 12px 16px;
+            border: 2px solid #567b9b;
+            border-radius: 8px;
+            background: #eaf3fa;
+            color: #244967;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .minor-entry {
+            display: grid;
+            grid-template-columns: 30px minmax(0, 1fr);
+            gap: 8px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .minor-entry-number {
+            font-weight: 700;
+            color: #345d7d;
+            text-align: right;
+        }
+
+        .ancestor-name-pair {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 8px;
+        }
+
+        .ancestor-address-section {
+            border-top: 2px solid #c5d4e0;
+            margin-top: 4px;
+            padding-top: 12px;
+        }
+
+        .ancestor-address-section > .ancestor-names {
+            margin: 10px 0;
+        }
+
+        .ancestor-address-section > .add-minor-name {
+            margin: 0 0 12px;
+        }
+
+        .minor-names {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .minor-names .text-input {
+            width: 100%;
+            min-width: 0;
+        }
+
+        /* 2-4 地基主：沿用主要住址的縣市、鄉鎮市區、詳細地址格式 */
+        .minor-address-fields {
+            display: grid;
+            /* 縣市與鄉鎮市區各自一組標籤＋選單，兩組固定同一排 */
+            grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .minor-address-fields > .ground-city,
+        .minor-address-fields > .ground-district {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .same-main-address-option {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0 2px;
+            font-weight: 600;
+        }
+
+        .minor-main-address-display {
+            grid-column: 1 / -1;
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #9bb6d8;
+            border-radius: 8px;
+            background: #f0f6ff;
+            color: #24456f;
+            overflow-wrap: anywhere;
+        }
+
+        .minor-address-fields .detail-address-row {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 100px minmax(0, 1fr);
+            align-items: center;
+            gap: 8px;
+        }
+
+        .minor-address-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ground-address-entry + .ground-address-entry {
+            border-top: 1px solid #b8c8d6;
+            padding-top: 12px;
+        }
+
+        .minor-address-list { counter-reset: address-entry; }
+        .ground-address-entry { counter-increment: address-entry; }
+        .ground-address-entry::before {
+            content: counter(address-entry) ".";
+            grid-column: 1 / -1;
+            color: #345d7d;
+            font-weight: 700;
+        }
+
+        @media (max-width: 480px) {
+            .ancestor-name-pair { grid-template-columns: minmax(0, 1fr); }
+        }
+
+        /* 2-5：每組歿者與陽上報恩人都有獨立編號 */
+        .minor-names[data-item="2-5"] {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .minor-names[data-item="2-5"] .minor-entry {
+            display: grid;
+            grid-template-columns: 28px minmax(0, 1fr);
+            align-items: start;
+            gap: 8px;
+        }
+
+        .minor-names[data-item="2-5"] .deceased-pair {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .minor-names[data-item="2-8"] {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .minor-names[data-item="2-8"] select {
+            width: auto;
+            min-width: 90px;
+        }
+
+        @media (max-width: 480px) {
+            .contact-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .minor-names[data-item="2-5"] .deceased-pair {
+                grid-template-columns: minmax(0, 1fr);
+            }
+            .ancestor-name-pair { grid-template-columns: minmax(0, 1fr); }
+
+            .contact-address-section {
+                padding: 14px;
+            }
+
+            .minor-address-fields {
+                grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
+                column-gap: 5px;
+                font-size: 13px;
+            }
+
+            .minor-address-fields .detail-address-row {
+                grid-template-columns: 88px minmax(0, 1fr);
+            }
+        }
+
+
+        /* 牌位類別：以獨立醒目區塊呈現 */
+        .tablet-category-section {
+            padding: 18px;
+            border: 3px solid #2457a7;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #edf5ff 0%, #ffffff 100%);
+            box-shadow: 0 4px 12px #2457a71c;
+            margin-bottom: 22px;
+        }
+
+        .tablet-category-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            color: #173f7d;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .tablet-category-heading::before {
+            content: "";
+            display: inline-block;
+            width: 6px;
+            height: 25px;
+            border-radius: 5px;
+            background: #2457a7;
+        }
+
+        .tablet-category-heading span {
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: #d8e8ff;
+            color: #2457a7;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .category-options {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .category-options label {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-height: 48px;
+            padding: 11px 12px;
+            border: 1px solid #a9c5e8;
+            border-radius: 9px;
+            background: #fff;
+            color: #24456f;
+            font-weight: 700;
+            cursor: pointer;
+            transition: border-color .15s ease, background .15s ease;
+        }
+
+        .category-options label:has(input:checked) {
+            border: 2px solid #2457a7;
+            background: #dceaff;
+            color: #173f7d;
+            box-shadow: inset 0 0 0 1px #2457a71a;
+        }
+
+        .category-options input[type="radio"] {
+            width: 19px;
+            height: 19px;
+            margin: 0;
+            accent-color: #2457a7;
+            flex-shrink: 0;
+        }
+
+        /* 消災姓名統計：加大數字並使用醒目卡片 */
+        .disaster-name-count {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 14px 12px;
+            border: 2px solid #d28a19;
+            border-radius: 12px;
+            background: #fff4d9;
+            color: #784500;
+            box-shadow: 0 3px 9px #a96b141c;
+            text-align: center;
+        }
+
+        .disaster-count-label {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .disaster-count-value {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 48px;
+            min-height: 44px;
+            padding: 2px 10px;
+            border-radius: 9px;
+            background: #a95e00;
+            color: #fff;
+            font-size: 28px;
+            line-height: 1.2;
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .disaster-count-unit {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        @media (max-width: 480px) {
+            .tablet-category-section {
+                padding: 13px;
+            }
+
+            .tablet-category-heading {
+                font-size: 18px;
+            }
+
+            .category-options {
+                gap: 8px;
+            }
+
+            .category-options label {
+                padding: 10px 8px;
+                font-size: 14px;
+            }
+
+            .disaster-name-count {
+                gap: 6px;
+                padding: 12px 8px;
+            }
+
+            .disaster-count-value {
+                min-width: 42px;
+                min-height: 40px;
+                font-size: 25px;
+            }
+        }
+
+    
+
+    /* 查詢或修改資料：加強區塊辨識度 */
+    #editSection {
+      margin-top: 28px;
+      padding: 22px;
+      border: 2px solid #4b78b8;
+      border-left: 7px solid #2457a7;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f0f6ff 0%, #ffffff 100%);
+      box-shadow: 0 4px 14px rgba(36, 87, 167, 0.12);
+    }
+
+    #editSection > label[for="searchPhone"] {
+      display: block;
+      margin: 0 0 10px;
+      color: #173f7d;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    #searchPhone {
+      display: block;
+      width: 100%;
+      max-width: 460px;
+      box-sizing: border-box;
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      border: 1px solid #9db8dc;
+      border-radius: 9px;
+      background: #fff;
+      font-size: 1rem;
+    }
+
+    #searchPhone:focus {
+      outline: 3px solid rgba(36, 87, 167, 0.18);
+      border-color: #2457a7;
+    }
+
+    #searchButton {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 20px;
+      border: 0;
+      border-radius: 9px;
+      background: #2457a7;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 7px rgba(36, 87, 167, 0.2);
+    }
+
+    #searchButton:hover {
+      background: #173f7d;
+    }
+
+    #searchButton:focus-visible {
+      outline: 3px solid #8eb7f0;
+      outline-offset: 3px;
+    }
+
+    #searchResults,
+    #editForm {
+      margin-top: 18px;
+    }
+
+    @media (max-width: 480px) {
+      #editSection {
+        padding: 16px;
+      }
+
+      #searchPhone,
+      #searchButton {
+        width: 100%;
+        max-width: none;
+      }
+    }
+
+</style>
 </head>
 
 <body>
-    <h1>三德精舍 法會牌位登記表</h1>
+    <h1><span>三德精舍</span><span>法會牌位登記表</span></h1>
 <!-- 修改登記資料區域 -->
-<div id="editSection">
-  <h2>修改登記資料</h2>
+
+    <form id="registrationForm">
+        
+<div class="field tablet-category-section">
+    <div class="tablet-category-heading">牌位類別 <span>請擇一</span></div>
+    <div class="category-options">
+        <label>
+            <input type="radio" name="tabletCategory" value="大牌位" required>
+            大牌位
+        </label>
+
+        <label>
+            <input type="radio" name="tabletCategory" value="中牌位">
+            中牌位
+        </label>
+
+        <label>
+            <input type="radio" name="tabletCategory" value="小牌位">
+            小牌位
+        </label>
+
+        <label>
+            <input type="radio" name="tabletCategory" value="全家小牌位">
+            全家小牌位
+        </label>
+    </div>
+</div>
+
+
+<div class="contact-address-section">
+    <h3 class="section-title">登記人資料</h3>
+
+    <div class="contact-row">
+        <div class="field">
+            <label for="name">寫牌位者：</label>
+            <input
+                class="text-input"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="請輸入寫牌位者姓名"
+                required
+            >
+        </div>
+
+        <div class="field">
+            <label for="phone">聯絡電話：</label>
+            <input
+                class="text-input"
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="請輸入聯絡電話"
+                required
+            >
+        </div>
+    </div>
+
+    <div class="field">
+        <label>主要住址：</label>
+
+        <div class="address-group">
+            <label for="city">縣市：</label>
+            <select class="text-input" id="city" name="city" required>
+                <option value="">請選擇縣市</option>
+            </select>
+
+            <label for="district">鄉鎮市區：</label>
+            <select class="text-input" id="district" name="district" required disabled>
+                <option value="">請先選擇縣市</option>
+            </select>
+
+            <div class="detail-address-row">
+                <label for="detailAddress">詳細地址：</label>
+                <input
+                    class="text-input detail-address-input"
+                    type="text"
+                    id="detailAddress"
+                    name="detailAddress"
+                    placeholder="請輸入路名、巷弄、門牌號碼"
+                    required
+                >
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+
+        <div class="field">
+            <div class="section-title">登記項目（可複選）：</div>
+
+            <div class="major-items">
+                <label class="major-option">
+                    <input
+                        type="checkbox"
+                        name="majorItem"
+                        value="消災"
+                        id="disaster"
+                    >
+                    <span>消災</span>
+                </label>
+
+                <div class="disaster-area">
+                    <div class="disaster-area-title">消災姓名：</div>
+
+                    <div id="disasterNames">
+                        
+<div class="name-row">
+    <span class="name-number">1.</span>
+    <input
+        class="text-input"
+        type="text"
+        name="disasterName"
+        placeholder="請輸入姓名"
+    >
+
+    <div class="disaster-address-options">
+        <label>
+            <input type="radio" name="disasterAddressType_0" value="main" checked>
+            同主要住址
+        </label>
+
+        <div class="main-address-display">
+            尚未填寫主要住址
+        </div>
+
+        <label>
+            <input type="radio" name="disasterAddressType_0" value="other">
+            其他住址
+        </label>
+
+        <input
+            class="text-input other-address-input"
+            type="text"
+            placeholder="請輸入其他住址"
+            style="display: none;"
+        >
+    </div>
+</div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="small-button"
+                        id="addDisasterName"
+                    >＋新增姓名</button>
+                    
+<div id="disasterNameCount" class="disaster-name-count" aria-live="polite">
+    <span class="disaster-count-label">消災姓名數量</span>
+    <span class="disaster-count-value">0</span>
+    <span class="disaster-count-unit">位</span>
+</div>
+
+                </div>
+
+                <label class="major-option">
+                    <input
+                        type="checkbox"
+                        name="majorItem"
+                        value="超薦"
+                        id="salvation"
+                    >
+                    <span>超薦</span>
+                </label>
+            </div>
+
+            <div id="salvationItems">
+                <p>超薦小項目（可複選）：</p>
+
+                
+<div class="minor-list">
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-1 個人累世冤親債主">
+            <span>2-1 個人累世冤親債主</span>
+        </label>
+        <div class="minor-names" data-item="2-1">
+            <div class="minor-entry"><span class="minor-entry-number">1.</span><input class="text-input minor-name-input" type="text" placeholder="敬薦人"></div>
+        </div>
+        <button type="button" class="small-button add-minor-name" data-target="2-1">＋新增</button>
+    </div>
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-2 累世今生所食所傷眾生">
+            <span>2-2 累世今生所食所傷眾生</span>
+        </label>
+        <div class="minor-names" data-item="2-2">
+            <div class="minor-entry"><span class="minor-entry-number">1.</span><input class="text-input minor-name-input" type="text" placeholder="敬薦人"></div>
+        </div>
+        <button type="button" class="small-button add-minor-name" data-target="2-2">＋新增</button>
+    </div>
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-3 歷代祖先">
+            <span>2-3 歷代祖先</span>
+        </label>
+        <div class="ancestor-address-section">
+            <div class="minor-address-list ancestor-address-list" data-item="2-3">
+                <div class="minor-names minor-address-fields ground-address-entry ancestor-address-entry">
+                    <div class="detail-address-row">
+                        <label for="ancestorSurname1">祖先姓氏：</label>
+                        <input class="text-input ancestor-surname" type="text" id="ancestorSurname1" name="ancestorSurname1" placeholder="請輸入祖先姓氏">
+                    </div>
+                    <label class="same-main-address-option">
+                        <input type="checkbox" class="same-main-address-checkbox">
+                        同主要住址
+                    </label>
+                    <div class="minor-main-address-display" style="display:none">尚未填寫主要住址</div>
+                    <label class="address-city-label" for="ancestorCity1">縣市：</label>
+                    <select class="text-input ground-city" id="ancestorCity1" name="ancestorCity1">
+                        <option value="">請選擇縣市</option>
+                    </select>
+                    <label class="address-district-label" for="ancestorDistrict1">鄉鎮市區：</label>
+                    <select class="text-input ground-district" id="ancestorDistrict1" name="ancestorDistrict1" disabled>
+                        <option value="">請先選擇縣市</option>
+                    </select>
+                    <div class="detail-address-row address-detail-row">
+                        <label for="ancestorDetailAddress1">詳細地址：</label>
+                        <input class="text-input detail-address-input ground-detail-address" type="text" id="ancestorDetailAddress1" name="ancestorDetailAddress1" placeholder="請輸入路名、巷弄、門牌號碼">
+                    </div>
+                    <div class="detail-address-row">
+                        <label for="ancestorBenefactor1">陽上報恩人：</label>
+                        <input class="text-input ancestor-benefactor" type="text" id="ancestorBenefactor1" name="ancestorBenefactor1" placeholder="陽上報恩人">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="small-button add-ancestor-address">＋新增</button>
+        </div>
+    </div>
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-4 地基主">
+            <span>2-4 地基主</span>
+        </label>
+        <div class="minor-address-list" data-item="2-4">
+            <div class="minor-names minor-address-fields ground-address-entry">
+                <label class="same-main-address-option">
+                    <input type="checkbox" class="same-main-address-checkbox">
+                    同主要住址
+                </label>
+                <div class="minor-main-address-display" style="display:none">尚未填寫主要住址</div>
+                <label class="address-city-label" for="groundCity">縣市：</label>
+                <select class="text-input ground-city" id="groundCity" name="groundCity">
+                    <option value="">請選擇縣市</option>
+                </select>
+
+                <label class="address-district-label" for="groundDistrict">鄉鎮市區：</label>
+                <select class="text-input ground-district" id="groundDistrict" name="groundDistrict" disabled>
+                    <option value="">請先選擇縣市</option>
+                </select>
+
+                <div class="detail-address-row address-detail-row">
+                    <label for="groundDetailAddress">詳細地址：</label>
+                    <input class="text-input detail-address-input ground-detail-address" type="text" id="groundDetailAddress" name="groundDetailAddress" placeholder="請輸入路名、巷弄、門牌號碼">
+                </div>
+                <div class="detail-address-row">
+                    <label for="groundRecommender">敬薦人：</label>
+                    <input class="text-input ground-recommender" type="text" id="groundRecommender" name="groundRecommender" placeholder="敬薦人">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="small-button add-minor-name" data-target="2-4">＋新增</button>
+    </div>
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-5 已過世親人">
+            <span>2-5 已過世親人(歿)</span>
+        </label>
+<div class="minor-names" data-item="2-5">
+    <div class="minor-entry">
+        <span class="minor-entry-number">1.</span>
+        <div class="deceased-pair">
+            <input class="text-input minor-name-input" type="text" placeholder="請輸入姓名（歿）">
+            <input class="text-input minor-name-input" type="text" placeholder="陽上報恩人">
+        </div>
+    </div>
+</div>
+        
+        <button type="button" class="small-button add-minor-name" data-target="2-5">＋新增</button>
+    </div>
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-6 墮胎流產嬰靈夭折無緣子女">
+            <span>2-6 墮胎流產嬰靈夭折無緣子女</span>
+        </label>
+        <div class="minor-names" data-item="2-6">
+            <div class="minor-entry">
+                <span class="minor-entry-number">1.</span>
+                <input class="text-input minor-name-input" type="text" placeholder="敬薦人">
+            </div>
+        </div>
+        <button type="button" class="small-button add-minor-name" data-target="2-6">＋新增</button>
+    </div>
+
+    <div class="minor-item">
+        <label class="minor-option">
+            <input type="checkbox" name="minorItem" value="2-7 其他（寵物）">
+            <span>2-7 其他（寵物）</span>
+        </label>
+        <div class="minor-names" data-item="2-7">
+            <div class="minor-entry">
+                <span class="minor-entry-number">1.</span>
+                <input class="text-input minor-name-input" type="text" placeholder="請輸入名字或寵物名稱">
+            </div>
+        </div>
+        <button type="button" class="small-button add-minor-name" data-target="2-7">＋新增</button>
+    </div>
+
+
+<div id="salvationTotalCount" class="salvation-total-count" aria-live="polite">超薦總數量：0 位</div>
+
+<div class="minor-item">
+    <label class="minor-option">
+        <input type="checkbox" name="minorItem" value="2-8 普桌">
+        <span>2-8 普桌</span>
+    </label>
+
+    <div class="minor-names" data-item="2-8">
+        <label for="publicTableCount">普桌數量：</label>
+        <select
+            class="text-input"
+            id="publicTableCount"
+            name="publicTableCount"
+        >
+            <option value="0" selected>0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+        </select>
+    </div>
+</div>
+
+
+</div>
+
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button">送出登記</button>
+    </form>
+    <div id="editSection">
+
 
   <label for="searchPhone">請輸入聯絡電話：</label>
   <input
@@ -261,9 +1220,9 @@
     placeholder="請輸入登記時的電話"
   >
 
-  <button type="button" id="searchButton">
-    查詢登記資料
-  </button>
+<button type="button" id="searchButton">
+    查詢或修改資料
+</button>
 
   <div id="searchResults"></div>
   <div id="editForm" style="display:none; margin-top:20px;">
@@ -308,186 +1267,6 @@
   <button type="button" id="cancelEditButton">取消</button>
 </div>
 </div>
-    <form id="registrationForm">
-        
-<div class="field">
-    <label>牌位類別：（請擇一）</label>
-    <div class="category-options">
-        <label>
-            <input type="radio" name="tabletCategory" value="大牌位" required>
-            大牌位
-        </label>
-
-        <label>
-            <input type="radio" name="tabletCategory" value="中牌位">
-            中牌位
-        </label>
-
-        <label>
-            <input type="radio" name="tabletCategory" value="小牌位">
-            小牌位
-        </label>
-
-        <label>
-            <input type="radio" name="tabletCategory" value="全家小牌位">
-            全家小牌位
-        </label>
-    </div>
-</div>
-
-
-<div class="contact-row">
-    <div class="field">
-        <label for="name">寫牌位者：</label>
-        <input
-            class="text-input"
-            type="text"
-            id="name"
-            name="name"
-            placeholder="請輸入寫牌位者姓名"
-            required
-        >
-    </div>
-
-    <div class="field">
-        <label for="phone">聯絡電話：</label>
-        <input
-            class="text-input"
-            type="tel"
-            id="phone"
-            name="phone"
-            placeholder="請輸入聯絡電話"
-            required
-        >
-    </div>
-</div>
-
-
-
-
-<div class="field">
-    <label>主要住址：</label>
-
-    <div class="address-group">
-        <label for="city">縣市：</label>
-        <select class="text-input" id="city" name="city" required>
-            <option value="">請選擇縣市</option>
-        </select>
-
-        <label for="district">鄉鎮市區：</label>
-        <select class="text-input" id="district" name="district" required disabled>
-            <option value="">請先選擇縣市</option>
-        </select>
-
-        <label for="detailAddress">詳細地址：</label>
-        <input
-            class="text-input"
-            type="text"
-            id="detailAddress"
-            name="detailAddress"
-            placeholder="請輸入路名、巷弄、門牌號碼"
-            required
-        >
-    </div>
-</div>
-
-
-
-        <div class="field">
-            <div class="section-title">登記項目（可複選）：</div>
-
-            <div class="major-items">
-                <label class="major-option">
-                    <input
-                        type="checkbox"
-                        name="majorItem"
-                        value="消災"
-                        id="disaster"
-                    >
-                    <span>消災</span>
-                </label>
-
-                <div class="disaster-area">
-                    <div class="disaster-area-title">消災姓名：</div>
-
-                    <div id="disasterNames">
-                        <div class="name-row">
-                            <input
-                                class="text-input"
-                                type="text"
-                                name="disasterName"
-                                placeholder="請輸入姓名"
-                            >
-                        </div>
-                    </div>
-
-                    <button
-                        type="button"
-                        class="small-button"
-                        id="addDisasterName"
-                    >＋新增姓名</button>
-                </div>
-
-                <label class="major-option">
-                    <input
-                        type="checkbox"
-                        name="majorItem"
-                        value="超薦"
-                        id="salvation"
-                    >
-                    <span>超薦</span>
-                </label>
-            </div>
-
-            <div id="salvationItems">
-                <p>超薦小項目（可複選）：</p>
-
-                <div class="minor-list">
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-1 個人累世冤親債主">
-                        <span>2-1 個人累世冤親債主</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-2 累世今生所食所傷眾生">
-                        <span>2-2 累世今生所食所傷眾生</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-3 歷代祖先">
-                        <span>2-3 歷代祖先</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-4 地基主">
-                        <span>2-4 地基主</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-5 已過世親人">
-                        <span>2-5 已過世親人</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-6 墮胎流產嬰靈夭折無緣子女">
-                        <span>2-6 墮胎流產嬰靈夭折無緣子女</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-7 其他（寵物）">
-                        <span>2-7 其他（寵物）</span>
-                    </label>
-
-                    <label class="minor-option">
-                        <input type="checkbox" name="minorItem" value="2-8 普桌">
-                        <span>2-8 普桌</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <button type="submit" class="submit-button">送出登記</button>
-    </form>
 
     <p id="message" role="status"></p>
 
@@ -507,6 +1286,44 @@
             "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec";
 
         let records = [];
+
+        // 各類別必須先勾選，該類別的輸入欄位與新增按鈕才可使用。
+        function syncMinorItemControls(item) {
+            if (!item) return;
+            const checkbox = item.querySelector('input[name="minorItem"]');
+            const enabled = Boolean(checkbox && checkbox.checked);
+            item.querySelectorAll('.same-main-address-checkbox').forEach(function (control) {
+                control.disabled = !enabled;
+            });
+            item.querySelectorAll('input:not([type="checkbox"]), select, textarea, button').forEach(function (control) {
+                if (!enabled) {
+                    control.disabled = true;
+                    return;
+                }
+                if (control.classList.contains('ground-district')) {
+                    const addressEntry = control.closest('.ground-address-entry');
+                    const city = addressEntry ? addressEntry.querySelector('.ground-city') : null;
+                    control.disabled = !city || !city.value;
+                } else {
+                    control.disabled = false;
+                }
+            });
+        }
+
+        function syncDisasterAreaControls() {
+            const disasterCheckbox = document.getElementById('disaster');
+            const enabled = Boolean(disasterCheckbox && disasterCheckbox.checked);
+            const area = document.querySelector('.disaster-area');
+            if (!area) return;
+            area.querySelectorAll('input, select, textarea, button').forEach(function (control) {
+                control.disabled = !enabled;
+            });
+        }
+
+        function syncAllOptionControls() {
+            document.querySelectorAll('.minor-item').forEach(syncMinorItemControls);
+            syncDisasterAreaControls();
+        }
         
 const cityDistricts = {
     "臺北市": ["中正區", "大同區", "中山區", "松山區", "大安區", "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"],
@@ -535,6 +1352,296 @@ const cityDistricts = {
 
 const citySelect = document.getElementById("city");
 const districtSelect = document.getElementById("district");
+const detailAddressInput = document.getElementById("detailAddress");
+const groundCitySelect = document.getElementById("groundCity");
+const groundDistrictSelect = document.getElementById("groundDistrict");
+
+function updateDisasterNameNumbers() {
+    const rows = document.querySelectorAll("#disasterNames .name-row");
+
+    rows.forEach(function (row, index) {
+        const number = row.querySelector(".name-number");
+
+        if (number) {
+            number.textContent = (index + 1) + ".";
+        }
+    });
+}
+
+// 統計已勾選的超薦類別中，實際填寫的敬薦人／陽上報恩人／寵物名稱數量。
+function updateSalvationTotalCount() {
+    let total = 0;
+    const countFilled = function (selector) {
+        document.querySelectorAll(selector).forEach(function (input) {
+            if (input.value.trim() !== "") total++;
+        });
+    };
+    const isChecked = function (itemId) {
+        const checkbox = document.querySelector('.minor-item input[name="minorItem"][value^="' + itemId + '"]');
+        return Boolean(checkbox && checkbox.checked);
+    };
+
+    if (isChecked("2-1")) countFilled('.minor-names[data-item="2-1"] .minor-name-input');
+    if (isChecked("2-2")) countFilled('.minor-names[data-item="2-2"] .minor-name-input');
+    if (isChecked("2-3")) countFilled('.ancestor-address-list[data-item="2-3"] .ancestor-benefactor');
+    if (isChecked("2-4")) countFilled('.minor-address-list[data-item="2-4"] .ground-recommender');
+    if (isChecked("2-5")) countFilled('.minor-names[data-item="2-5"] .deceased-pair input:nth-child(2)');
+    if (isChecked("2-6")) countFilled('.minor-names[data-item="2-6"] .minor-name-input');
+    if (isChecked("2-7")) countFilled('.minor-names[data-item="2-7"] .minor-name-input');
+
+    const display = document.getElementById("salvationTotalCount");
+    if (display) display.textContent = "超薦總數量：" + total + " 位";
+}
+
+document.addEventListener("input", function (event) {
+    if (event.target.closest("#salvationItems")) updateSalvationTotalCount();
+});
+
+function updateDisasterNameCount() {
+    const nameInputs = document.querySelectorAll(
+        '#disasterNames input[name="disasterName"]'
+    );
+
+    let count = 0;
+
+    nameInputs.forEach(function (input) {
+        if (input.value.trim() !== "") {
+            count++;
+        }
+    });
+
+    const countDisplay = document.getElementById("disasterNameCount");
+
+    if (countDisplay) {
+        countDisplay.innerHTML = '<span class="disaster-count-label">消災姓名數量</span>' +
+            '<span class="disaster-count-value">' + count + '</span>' +
+            '<span class="disaster-count-unit">位</span>';
+    }
+}
+document.getElementById("disasterNames").addEventListener("input", function (event) {
+    if (event.target.name === "disasterName") {
+        updateDisasterNameCount();
+    }
+});
+
+updateDisasterNameCount();
+
+
+document.querySelectorAll(".add-minor-name").forEach(function (button) {
+    button.addEventListener("click", function () {
+        const itemId = button.dataset.target;
+        const container = itemId === "2-4"
+            ? document.querySelector('.minor-address-list[data-item="2-4"]')
+            : document.querySelector('.minor-names[data-item="' + itemId + '"]');
+
+        if (!container) {
+            return;
+        }
+
+        if (itemId === "2-4") {
+            // 地基主每按一次新增，就複製一組完整的縣市、鄉鎮市區、詳細地址欄位。
+            const entry = container.querySelector('.ground-address-entry').cloneNode(true);
+            const index = container.querySelectorAll('.ground-address-entry').length + 1;
+            const city = entry.querySelector('.ground-city');
+            const district = entry.querySelector('.ground-district');
+            const detail = entry.querySelector('.ground-detail-address');
+            const recommender = entry.querySelector('.ground-recommender');
+            city.id = 'groundCity' + index;
+            city.name = 'groundCity' + index;
+            district.id = 'groundDistrict' + index;
+            district.name = 'groundDistrict' + index;
+            detail.id = 'groundDetailAddress' + index;
+            detail.name = 'groundDetailAddress' + index;
+            recommender.id = 'groundRecommender' + index;
+            recommender.name = 'groundRecommender' + index;
+            entry.querySelector('label[for="groundCity"]').htmlFor = city.id;
+            entry.querySelector('label[for="groundDistrict"]').htmlFor = district.id;
+            entry.querySelector('label[for="groundDetailAddress"]').htmlFor = detail.id;
+            entry.querySelector('label[for="groundRecommender"]').htmlFor = recommender.id;
+            city.value = '';
+            district.innerHTML = '<option value="">請先選擇縣市</option>';
+            district.disabled = true;
+            detail.value = '';
+            recommender.value = '';
+            container.appendChild(entry);
+            syncMinorItemControls(button.closest('.minor-item'));
+            updateSalvationTotalCount();
+            populateGroundCities(city);
+            city.addEventListener('change', function () {
+                populateGroundDistricts(city, district);
+            });
+            city.focus();
+        } else if (itemId === "2-5") {
+            // 2-5 每按一次「新增」，增加一組帶有連續編號的歿者姓名與陽上報恩人。
+            const entry = document.createElement("div");
+            entry.className = "minor-entry";
+
+            const number = document.createElement("span");
+            number.className = "minor-entry-number";
+            number.textContent = (container.querySelectorAll(".minor-entry").length + 1) + ".";
+
+            const pair = document.createElement("div");
+            pair.className = "deceased-pair";
+
+            const deceasedInput = document.createElement("input");
+            deceasedInput.type = "text";
+            deceasedInput.className = "text-input minor-name-input";
+            deceasedInput.placeholder = "請輸入姓名（歿）";
+
+            const benefactorInput = document.createElement("input");
+            benefactorInput.type = "text";
+            benefactorInput.className = "text-input minor-name-input";
+            benefactorInput.placeholder = "陽上報恩人";
+
+            pair.append(deceasedInput, benefactorInput);
+            entry.append(number, pair);
+            container.appendChild(entry);
+            syncMinorItemControls(button.closest('.minor-item'));
+            updateSalvationTotalCount();
+            deceasedInput.focus();
+        } else {
+            const entry = document.createElement("div");
+            entry.className = "minor-entry";
+            const number = document.createElement("span");
+            number.className = "minor-entry-number";
+            number.textContent = (container.querySelectorAll(".minor-entry").length + 1) + ".";
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "text-input minor-name-input";
+            input.placeholder = (itemId === "2-1" || itemId === "2-2" || itemId === "2-6")
+                ? "敬薦人"
+                : itemId === "2-7"
+                    ? "請輸入名字或寵物名稱"
+                    : "請輸入姓名";
+            entry.append(number, input);
+            container.appendChild(entry);
+            syncMinorItemControls(button.closest('.minor-item'));
+            updateSalvationTotalCount();
+            input.focus();
+        }
+    });
+});
+
+document.querySelectorAll(".add-ancestor-address").forEach(function (button) {
+    button.addEventListener("click", function () {
+        const container = document.querySelector('.ancestor-address-list[data-item="2-3"]');
+        const template = container.querySelector('.ancestor-address-entry');
+        const entry = template.cloneNode(true);
+        const index = container.querySelectorAll('.ancestor-address-entry').length + 1;
+        const surname = entry.querySelector('.ancestor-surname');
+        const city = entry.querySelector('.ground-city');
+        const district = entry.querySelector('.ground-district');
+        const detail = entry.querySelector('.ground-detail-address');
+        const benefactor = entry.querySelector('.ancestor-benefactor');
+        const surnameLabel = entry.querySelector('label[for="ancestorSurname1"]');
+        const cityLabel = entry.querySelector('label[for="ancestorCity1"]');
+        const districtLabel = entry.querySelector('label[for="ancestorDistrict1"]');
+        const detailLabel = entry.querySelector('label[for="ancestorDetailAddress1"]');
+        const benefactorLabel = entry.querySelector('label[for="ancestorBenefactor1"]');
+        surname.id = 'ancestorSurname' + index; surname.name = surname.id;
+        city.id = 'ancestorCity' + index; city.name = city.id;
+        district.id = 'ancestorDistrict' + index; district.name = district.id;
+        detail.id = 'ancestorDetailAddress' + index; detail.name = detail.id;
+        benefactor.id = 'ancestorBenefactor' + index; benefactor.name = benefactor.id;
+        surnameLabel.htmlFor = surname.id;
+        cityLabel.htmlFor = city.id;
+        districtLabel.htmlFor = district.id;
+        detailLabel.htmlFor = detail.id;
+        benefactorLabel.htmlFor = benefactor.id;
+        surname.value = '';
+        city.value = '';
+        district.innerHTML = '<option value="">請先選擇縣市</option>';
+        district.disabled = true;
+        detail.value = '';
+        benefactor.value = '';
+        container.appendChild(entry);
+        syncMinorItemControls(button.closest('.minor-item'));
+        updateSalvationTotalCount();
+        populateGroundCities(city);
+        city.addEventListener('change', function () { populateGroundDistricts(city, district); });
+        surname.focus();
+    });
+});
+
+function updateMainAddressDisplay() {
+    const city = citySelect.value;
+    const district = districtSelect.value;
+    const detail = detailAddressInput.value.trim();
+
+    const address = [city, district, detail]
+        .filter(Boolean)
+        .join("");
+
+    document.querySelectorAll(".main-address-display, .minor-main-address-display").forEach(function (display) {
+        display.textContent = address || "尚未填寫主要住址";
+    });
+}
+
+function syncSameMainAddressEntry(entry) {
+    if (!entry) return;
+    const checkbox = entry.querySelector('.same-main-address-checkbox');
+    const display = entry.querySelector('.minor-main-address-display');
+    const useMain = Boolean(checkbox && checkbox.checked);
+    const addressParts = entry.querySelectorAll('.address-city-label, .address-district-label, .ground-city, .ground-district, .address-detail-row');
+    addressParts.forEach(function (part) {
+        part.style.display = useMain ? 'none' : '';
+    });
+    if (display) {
+        display.style.display = useMain ? 'block' : 'none';
+    }
+}
+
+document.querySelectorAll('.minor-address-list .ground-address-entry').forEach(function (entry) {
+    const checkbox = entry.querySelector('.same-main-address-checkbox');
+    if (checkbox) {
+        checkbox.addEventListener('change', function () { syncSameMainAddressEntry(entry); });
+    }
+});
+
+document.querySelectorAll('.minor-address-list').forEach(function (list) {
+    list.addEventListener('change', function (event) {
+        if (!event.target.classList.contains('same-main-address-checkbox')) return;
+        syncSameMainAddressEntry(event.target.closest('.ground-address-entry'));
+    });
+});
+
+citySelect.addEventListener("change", updateMainAddressDisplay);
+districtSelect.addEventListener("change", updateMainAddressDisplay);
+detailAddressInput.addEventListener("input", updateMainAddressDisplay);
+
+updateMainAddressDisplay();
+
+disasterNames.addEventListener("change", function (event) {
+    if (event.target.type !== "radio") {
+        return;
+    }
+
+    const row = event.target.closest(".name-row");
+
+    if (!row) {
+        return;
+    }
+
+    const mainAddressDisplay = row.querySelector(".main-address-display");
+    const otherAddressInput = row.querySelector(".other-address-input");
+    const selectedType = row.querySelector(
+        'input[type="radio"]:checked'
+    );
+
+    if (!mainAddressDisplay || !otherAddressInput || !selectedType) {
+        return;
+    }
+
+    if (selectedType.value === "other") {
+        mainAddressDisplay.style.display = "none";
+        otherAddressInput.style.display = "block";
+    } else {
+        mainAddressDisplay.style.display = "block";
+        otherAddressInput.style.display = "none";
+    }
+});
+
+
 
 Object.keys(cityDistricts).forEach(function (city) {
     const option = document.createElement("option");
@@ -558,6 +1665,41 @@ citySelect.addEventListener("change", function () {
     districtSelect.disabled = districts.length === 0;
 });
 
+// 地基主所有地址組都使用與主要住址相同的縣市／鄉鎮市區資料。
+function populateGroundCities(select) {
+    select.innerHTML = '<option value="">請選擇縣市</option>';
+    Object.keys(cityDistricts).forEach(function (city) {
+        const option = document.createElement("option");
+        option.value = city;
+        option.textContent = city;
+        select.appendChild(option);
+    });
+}
+
+function populateGroundDistricts(citySelectElement, districtSelectElement) {
+    districtSelectElement.innerHTML = '<option value="">請選擇鄉鎮市區</option>';
+    const districts = cityDistricts[citySelectElement.value] || [];
+    districts.forEach(function (district) {
+        const option = document.createElement("option");
+        option.value = district;
+        option.textContent = district;
+        districtSelectElement.appendChild(option);
+    });
+    districtSelectElement.disabled = districts.length === 0;
+}
+
+populateGroundCities(groundCitySelect);
+groundCitySelect.addEventListener("change", function () {
+    populateGroundDistricts(groundCitySelect, groundDistrictSelect);
+});
+
+document.querySelectorAll('.ancestor-address-entry').forEach(function (entry) {
+    const city = entry.querySelector('.ground-city');
+    const district = entry.querySelector('.ground-district');
+    populateGroundCities(city);
+    city.addEventListener('change', function () { populateGroundDistricts(city, district); });
+});
+
 
         try {
             records = JSON.parse(
@@ -576,33 +1718,89 @@ citySelect.addEventListener("change", function () {
                         checkbox.checked = false;
                     });
             }
+            syncAllOptionControls();
         });
 
-        addDisasterNameButton.addEventListener("click", function () {
-            const row = document.createElement("div");
-            row.className = "name-row";
-
-            const input = document.createElement("input");
-            input.type = "text";
-            input.name = "disasterName";
-            input.className = "text-input";
-            input.placeholder = "請輸入姓名";
-
-            const removeButton = document.createElement("button");
-            removeButton.type = "button";
-            removeButton.className = "remove-button";
-            removeButton.textContent = "刪除";
-            removeButton.setAttribute("aria-label", "刪除此姓名欄位");
-
-            removeButton.addEventListener("click", function () {
-                row.remove();
+        document.getElementById('disaster').addEventListener('change', syncDisasterAreaControls);
+        document.querySelectorAll('.minor-item input[name="minorItem"]').forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                syncMinorItemControls(checkbox.closest('.minor-item'));
+                updateSalvationTotalCount();
             });
-
-            row.appendChild(input);
-            row.appendChild(removeButton);
-            disasterNames.appendChild(row);
-            input.focus();
         });
+        syncAllOptionControls();
+        updateSalvationTotalCount();
+
+        
+addDisasterNameButton.addEventListener("click", function () {
+const number = document.createElement("span");
+number.className = "name-number";
+number.textContent = "";
+    const row = document.createElement("div");
+    row.className = "name-row";
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "disasterName";
+    input.className = "text-input";
+    input.placeholder = "請輸入姓名";
+
+    const addressOptions = document.createElement("div");
+    addressOptions.className = "disaster-address-options";
+
+    const radioName = "disasterAddressType_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+
+    addressOptions.innerHTML = `
+        <label>
+            <input type="radio" name="${radioName}" value="main" checked>
+            同主要住址
+        </label>
+
+        <div class="main-address-display">
+            尚未填寫主要住址
+        </div>
+
+        <label>
+            <input type="radio" name="${radioName}" value="other">
+            其他住址
+        </label>
+
+        <input
+            class="text-input other-address-input"
+            type="text"
+            placeholder="請輸入其他住址"
+            style="display: none;"
+        >
+    `;
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "remove-button";
+    removeButton.textContent = "刪除";
+    removeButton.setAttribute("aria-label", "刪除此姓名欄位");
+
+removeButton.addEventListener("click", function () {
+    row.remove();
+    updateDisasterNameNumbers();
+    updateDisasterNameCount();
+});
+
+
+row.appendChild(number);
+row.appendChild(input);
+row.appendChild(addressOptions);
+row.appendChild(removeButton);
+
+disasterNames.appendChild(row);
+syncDisasterAreaControls();
+
+updateMainAddressDisplay();
+updateDisasterNameNumbers();
+updateDisasterNameCount();
+input.focus();
+
+});
+
 
         function showRecords() {
             recordList.replaceChildren();
@@ -704,18 +1902,32 @@ citySelect.addEventListener("change", function () {
                 form.reset();
                 districtSelect.innerHTML = '<option value="">請先選擇縣市</option>';
                 districtSelect.disabled = true;
+                groundDistrictSelect.innerHTML = '<option value="">請先選擇縣市</option>';
+                groundDistrictSelect.disabled = true;
 
                 disasterNames.innerHTML = `
-                    <div class="name-row">
-                        <input
-                            class="text-input"
-                            type="text"
-                            name="disasterName"
-                            placeholder="請輸入姓名"
-                        >
-                    </div>
+<div class="name-row">
+    <span class="name-number">1.</span>
+    <input class="text-input" type="text" name="disasterName" placeholder="請輸入姓名">
+    <div class="disaster-address-options">
+        <label>
+            <input type="radio" name="disasterAddressType_0" value="main" checked>
+            同主要住址
+        </label>
+        <div class="main-address-display">尚未填寫主要住址</div>
+        <label>
+            <input type="radio" name="disasterAddressType_0" value="other">
+            其他住址
+        </label>
+        <input class="text-input other-address-input" type="text" placeholder="請輸入其他住址" style="display: none;">
+    </div>
+</div>
                 `;
                 salvationItems.style.display = "none";
+                updateMainAddressDisplay();
+                updateDisasterNameNumbers();
+                updateDisasterNameCount();
+                syncAllOptionControls();
 
             } catch (error) {
                 message.textContent =
