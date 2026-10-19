@@ -1895,6 +1895,90 @@ input.focus();
                 );
             }
 
+            // 組合每一筆超薦／消災明細，實際流水號由 Apps Script 產生，避免重複。
+            const mainAddress = [
+                document.getElementById("city").value,
+                document.getElementById("district").value,
+                document.getElementById("detailAddress").value.trim()
+            ].filter(Boolean).join("");
+
+            const disasterEntries = selectedMajorItems.includes("消災")
+                ? Array.from(document.querySelectorAll("#disasterNames .name-row")).map(function (row) {
+                    const nameInput = row.querySelector('input[name="disasterName"]');
+                    if (!nameInput || !nameInput.value.trim()) return null;
+                    const selectedAddressType = row.querySelector('input[type="radio"]:checked');
+                    const otherAddressInput = row.querySelector(".other-address-input");
+                    const address = selectedAddressType && selectedAddressType.value === "other"
+                        ? (otherAddressInput ? otherAddressInput.value.trim() : "")
+                        : mainAddress;
+                    return { name: nameInput.value.trim(), address: address || mainAddress };
+                }).filter(Boolean)
+                : [];
+
+            const details = [];
+            const isMinorSelected = function (prefix) {
+                return selectedMinorItems.some(function (value) { return value.indexOf(prefix) === 0; });
+            };
+            const addSimpleMinorDetails = function (itemId, category, role) {
+                if (!isMinorSelected(itemId)) return;
+                document.querySelectorAll('.minor-names[data-item="' + itemId + '"] .minor-name-input').forEach(function (input) {
+                    const value = input.value.trim();
+                    if (value) details.push({ category: category, name: value, role: role, address: "" });
+                });
+            };
+            const readAddress = function (entry, sameMainSelector) {
+                const sameMain = entry.querySelector(".same-main-address-checkbox");
+                if (sameMain && sameMain.checked) return mainAddress;
+                const city = entry.querySelector(".ground-city");
+                const district = entry.querySelector(".ground-district");
+                const detail = entry.querySelector(".ground-detail-address");
+                return [city ? city.value : "", district ? district.value : "", detail ? detail.value.trim() : ""].filter(Boolean).join("");
+            };
+
+            if (selectedMajorItems.includes("消災")) {
+                disasterEntries.forEach(function (entry) {
+                    details.push({ category: "消災", name: entry.name, role: "消災姓名", address: entry.address || mainAddress });
+                });
+            }
+            if (selectedMajorItems.includes("超薦")) {
+                addSimpleMinorDetails("2-1", "2-1 個人累世冤親債主", "敬薦人");
+                addSimpleMinorDetails("2-2", "2-2 累世今生所食所傷眾生", "敬薦人");
+
+                if (isMinorSelected("2-3")) {
+                    document.querySelectorAll('.minor-address-list[data-item="2-3"] .ancestor-address-entry').forEach(function (entry) {
+                        const surname = (entry.querySelector(".ancestor-surname") || {}).value || "";
+                        const benefactor = (entry.querySelector(".ancestor-benefactor") || {}).value || "";
+                        const address = readAddress(entry);
+                        if (surname.trim() || benefactor.trim() || address) {
+                            details.push({ category: "2-3 歷代祖先", name: surname.trim(), role: "陽上報恩人", benefactor: benefactor.trim(), address: address, note: surname.trim() ? "祖先姓氏：" + surname.trim() : "" });
+                        }
+                    });
+                }
+                if (isMinorSelected("2-4")) {
+                    document.querySelectorAll('.minor-address-list[data-item="2-4"] .ground-address-entry').forEach(function (entry) {
+                        const recommender = (entry.querySelector(".ground-recommender") || {}).value || "";
+                        const address = readAddress(entry);
+                        if (recommender.trim() || address) details.push({ category: "2-4 地基主", name: "地基主", role: "敬薦人", benefactor: recommender.trim(), address: address });
+                    });
+                }
+                if (isMinorSelected("2-5")) {
+                    document.querySelectorAll('.minor-names[data-item="2-5"] .minor-entry').forEach(function (entry) {
+                        const inputs = entry.querySelectorAll(".minor-name-input");
+                        const deceased = inputs[0] ? inputs[0].value.trim() : "";
+                        const benefactor = inputs[1] ? inputs[1].value.trim() : "";
+                        if (deceased || benefactor) details.push({ category: "2-5 已過世親人（歿）", name: deceased, role: "陽上報恩人", benefactor: benefactor, address: "" });
+                    });
+                }
+                addSimpleMinorDetails("2-6", "2-6 墮胎流產嬰靈夭折無緣子女", "敬薦人");
+                addSimpleMinorDetails("2-7", "2-7 其他（寵物）", "寵物姓名");
+                if (isMinorSelected("2-8")) {
+                    const tableCount = Math.max(0, Number(document.getElementById("publicTableCount").value || 0));
+                    for (let i = 1; i <= tableCount; i++) {
+                        details.push({ category: "2-8 普桌", name: "普桌", role: "普桌", address: "", tableNumber: i, quantity: 1 });
+                    }
+                }
+            }
+
             const record = {
                 name: document.getElementById("name").value.trim(),
                 tabletCategory: document.querySelector('input[name="tabletCategory"]:checked').value,
@@ -1905,6 +1989,8 @@ input.focus();
     document.getElementById("detailAddress").value.trim()
 ].filter(Boolean).join(""),
                 disasterNames: selectedMajorItems.includes("消災") ? names : [],
+                disasterEntries: disasterEntries,
+                details: details,
                 item: itemDetails.join("；")
             };
 
