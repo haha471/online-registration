@@ -1282,6 +1282,23 @@
         const message = document.getElementById("message");
         const recordList = document.getElementById("recordList");
 
+        // 提前綁定超薦開關，避免後續初始化程式出錯時，超薦按鈕完全沒有反應。
+        salvationCheckbox.addEventListener("change", function () {
+            salvationItems.style.display = this.checked ? "block" : "none";
+
+            if (!this.checked) {
+                document.querySelectorAll('input[name="minorItem"]').forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+            }
+
+            if (typeof syncAllOptionControls === "function") syncAllOptionControls();
+            if (typeof updateSalvationTotalCount === "function") updateSalvationTotalCount();
+        });
+
+        // 頁面載入時，顯示狀態與超薦勾選狀態保持一致。
+        salvationItems.style.display = salvationCheckbox.checked ? "block" : "none";
+
         const scriptUrl =
             "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec";
 
@@ -1708,18 +1725,6 @@ document.querySelectorAll('.ancestor-address-entry').forEach(function (entry) {
         } catch (error) {
             records = [];
         }
-
-        salvationCheckbox.addEventListener("change", function () {
-            salvationItems.style.display = this.checked ? "block" : "none";
-
-            if (!this.checked) {
-                document.querySelectorAll('input[name="minorItem"]')
-                    .forEach(function (checkbox) {
-                        checkbox.checked = false;
-                    });
-            }
-            syncAllOptionControls();
-        });
 
         document.getElementById('disaster').addEventListener('change', syncDisasterAreaControls);
         document.querySelectorAll('.minor-item input[name="minorItem"]').forEach(function (checkbox) {
