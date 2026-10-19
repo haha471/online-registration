@@ -420,6 +420,18 @@
             gap: 14px;
         }
 
+
+        .minor-item-hint {
+            margin: 2px 0 4px;
+            padding: 9px 12px;
+            border-radius: 7px;
+            background: #fff4d9;
+            color: #805500;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .minor-item-hint[hidden] { display: none !important; }
+
         .minor-item {
             display: flex;
             flex-direction: column;
@@ -1309,6 +1321,20 @@
             if (!item) return;
             const checkbox = item.querySelector('input[name="minorItem"]');
             const enabled = Boolean(checkbox && checkbox.checked);
+            let hint = item.querySelector('.minor-item-hint');
+            if (!hint) {
+                hint = document.createElement('div');
+                hint.className = 'minor-item-hint';
+                hint.textContent = '請先勾選此項目，才能輸入資料或按「＋新增」。';
+                if (checkbox) {
+                    const optionLabel = checkbox.closest('.minor-option');
+                    if (optionLabel) optionLabel.insertAdjacentElement('afterend', hint);
+                    else item.insertBefore(hint, item.firstChild);
+                } else {
+                    item.insertBefore(hint, item.firstChild);
+                }
+            }
+            hint.hidden = enabled;
             item.querySelectorAll('.same-main-address-checkbox').forEach(function (control) {
                 control.disabled = !enabled;
             });
