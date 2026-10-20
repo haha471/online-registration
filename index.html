@@ -1311,7 +1311,8 @@
         // 頁面載入時，顯示狀態與超薦勾選狀態保持一致。
         salvationItems.style.display = salvationCheckbox.checked ? "block" : "none";
 
-const scriptUrl = "https://script.google.com/macros/s/AKfycbx2IqLQCz_-arkB-D6MV7E5j-twsdvKb1fDOBlK4_s7i0lJSHtkVrmg2kgf2j6IXYXm/exec";
+        const scriptUrl =
+            "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec";
 
         let records = [];
 
@@ -1922,7 +1923,7 @@ input.focus();
                 if (!isMinorSelected(itemId)) return;
                 document.querySelectorAll('.minor-names[data-item="' + itemId + '"] .minor-name-input').forEach(function (input) {
                     const value = input.value.trim();
-                    if (value) details.push({ category: category, name: value, role: role, benefactor: "", address: "" });
+                    if (value) details.push({ category: category, name: value, role: role, address: "" });
                 });
             };
             const readAddress = function (entry, sameMainSelector) {
@@ -1948,8 +1949,12 @@ input.focus();
                         const surname = (entry.querySelector(".ancestor-surname") || {}).value || "";
                         const benefactor = (entry.querySelector(".ancestor-benefactor") || {}).value || "";
                         const address = readAddress(entry);
-                        if (surname.trim() || benefactor.trim() || address) {
-                            details.push({ category: "2-3 歷代祖先", name: surname.trim(), role: "祖先姓氏", benefactor: benefactor.trim(), address: address, note: benefactor.trim() ? "陽上報恩人：" + benefactor.trim() : "" });
+                        // 每一個姓名輸入框各自建立一列，祖先姓氏與陽上報恩人不共用同一列。
+                        if (surname.trim()) {
+                            details.push({ category: "2-3 歷代祖先", name: surname.trim(), role: "祖先姓氏", address: address });
+                        }
+                        if (benefactor.trim()) {
+                            details.push({ category: "2-3 歷代祖先", name: benefactor.trim(), role: "陽上報恩人", address: address });
                         }
                     });
                 }
@@ -1957,7 +1962,8 @@ input.focus();
                     document.querySelectorAll('.minor-address-list[data-item="2-4"] .ground-address-entry').forEach(function (entry) {
                         const recommender = (entry.querySelector(".ground-recommender") || {}).value || "";
                         const address = readAddress(entry);
-                        if (recommender.trim() || address) details.push({ category: "2-4 地基主", name: "地基主", role: "敬薦人", benefactor: recommender.trim(), address: address });
+                        if (recommender.trim()) details.push({ category: "2-4 地基主", name: recommender.trim(), role: "敬薦人", address: address });
+                        else if (address) details.push({ category: "2-4 地基主", name: "地基主", role: "地基主", address: address });
                     });
                 }
                 if (isMinorSelected("2-5")) {
@@ -1965,7 +1971,9 @@ input.focus();
                         const inputs = entry.querySelectorAll(".minor-name-input");
                         const deceased = inputs[0] ? inputs[0].value.trim() : "";
                         const benefactor = inputs[1] ? inputs[1].value.trim() : "";
-                        if (deceased || benefactor) details.push({ category: "2-5 已過世親人（歿）", name: deceased, role: "請輸入姓名（歿）", benefactor: benefactor, address: "", note: benefactor ? "陽上報恩人：" + benefactor : "" });
+                        // 歿者姓名與陽上報恩人分開記錄，各自一列。
+                        if (deceased) details.push({ category: "2-5 已過世親人（歿）", name: deceased, role: "請輸入姓名（歿）", address: "" });
+                        if (benefactor) details.push({ category: "2-5 已過世親人（歿）", name: benefactor, role: "陽上報恩人", address: "" });
                     });
                 }
                 addSimpleMinorDetails("2-6", "2-6 墮胎流產嬰靈夭折無緣子女", "敬薦人");
@@ -1973,7 +1981,7 @@ input.focus();
                 if (isMinorSelected("2-8")) {
                     const tableCount = Math.max(0, Number(document.getElementById("publicTableCount").value || 0));
                     for (let i = 1; i <= tableCount; i++) {
-                        details.push({ category: "2-8 普桌", name: "普桌", role: "普桌", benefactor: "", address: "", tableNumber: i, quantity: 1, note: "第" + i + "桌" });
+                        details.push({ category: "2-8 普桌", name: "普桌", role: "普桌", address: "", tableNumber: i, quantity: 1 });
                     }
                 }
             }
@@ -1981,7 +1989,7 @@ input.focus();
             const record = {
                 name: document.getElementById("name").value.trim(),
                 tabletCategory: document.querySelector('input[name="tabletCategory"]:checked').value,
-                phone: String(document.getElementById("phone").value).trim().replace(/[\s-]/g, ""),
+                phone: document.getElementById("phone").value.trim(),
                 address: [
     document.getElementById("city").value,
     document.getElementById("district").value,
@@ -2053,7 +2061,7 @@ input.focus();
 
         showRecords();
         document.getElementById("searchButton").addEventListener("click", function () {
-    const phone = String(document.getElementById("searchPhone").value).trim().replace(/[\s-]/g, "");
+    const phone = document.getElementById("searchPhone").value.trim();
     const resultsDiv = document.getElementById("searchResults");
 
     if (!phone) {
@@ -2117,7 +2125,7 @@ resultsDiv.appendChild(record);
 
     const script = document.createElement("script");
     script.src =
-        "https://script.google.com/macros/s/AKfycbx2IqLQCz_-arkB-D6MV7E5j-twsdvKb1fDOBlK4_s7i0lJSHtkVrmg2kgf2j6IXYXm/exec" +
+        "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec" +
         "?action=search&phone=" + encodeURIComponent(phone) +
         "&callback=" + callbackName;
 
@@ -2131,7 +2139,7 @@ resultsDiv.appendChild(record);
 });
 document.getElementById("saveEditButton").addEventListener("click", async function () {
     const rowNumber = Number(document.getElementById("editRowNumber").value);
-    const phone = String(document.getElementById("editPhone").value).trim().replace(/[\s-]/g, "");
+    const phone = document.getElementById("editPhone").value.trim();
 
     if (!rowNumber || !phone) {
         alert("請確認資料列與聯絡電話已填寫。");
@@ -2159,7 +2167,7 @@ document.getElementById("saveEditButton").addEventListener("click", async functi
 
     try {
         await fetch(
-            "https://script.google.com/macros/s/AKfycbx2IqLQCz_-arkB-D6MV7E5j-twsdvKb1fDOBlK4_s7i0lJSHtkVrmg2kgf2j6IXYXm/exec",
+            "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec",
             {
                 method: "POST",
                 mode: "no-cors",
