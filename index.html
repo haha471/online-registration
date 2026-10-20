@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>三德精舍法會牌位登記表</title>
+    <title>三德精舍 法會雲端登記表</title>
 
     <style>
         * {
@@ -12,2184 +11,843 @@
         }
 
         body {
-            font-family: Arial, "Microsoft JhengHei", sans-serif;
-            max-width: 680px;
-            margin: 30px auto;
-            padding: 16px;
-            background-color: #f3f6fb;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        h1, h2 {
-            color: #2457a7;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 26px;
-            line-height: 1.35;
-        }
-
-        h1 span {
-            display: block;
-        }
-
-        h1 span + span {
-            margin-top: 2px;
-        }
-
-        form, #recordList {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px #00000012;
-        }
-
-        .field {
-            margin-bottom: 18px;
-        }
-        .address-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-}
-
-.address-group label {
-    white-space: nowrap;
-}
-
-.address-group select {
-    width: auto;
-    flex: 1;
-    min-width: 120px;
-}
-
-        .field > label,
-        .section-title {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-        }
-
-        .text-input {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-.detail-address-input {
-    width: 100%;
-    flex: 1;
-    min-width: 0;
-    box-sizing: border-box;
-    padding: 12px;
-}
-
-.address-group .detail-address-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-}
-
-.address-group .detail-address-row label {
-    flex: 0 0 auto;
-    white-space: nowrap;
-    margin: 0;
-}
-
-.address-group .detail-address-row .detail-address-input {
-    flex: 1;
-    width: 0;
-    min-width: 0;
-    box-sizing: border-box;
-}
-
-.major-items {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-    margin: 12px 0;
-}
-
-.major-option {
-    flex-shrink: 0;
-}
-
-.disaster-area {
-    min-width: 0;
-    flex: 1;
-}
-
-
-        .major-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            white-space: nowrap;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #9bb6d8;
-            border-radius: 12px;
-            background: #f7faff;
-            color: #1f3f68;
-            font-size: 20px;
-            line-height: 1.4;
-            transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
-        }
-
-        .major-option:hover {
-            border-color: #2457a7;
-            background: #edf4ff;
-        }
-
-        /* 勾選消災／超薦後，以明顯底色、粗框與狀態標籤提示 */
-        .major-option:has(input:checked) {
-            border: 3px solid #174f9c;
-            background: #e3efff;
-            color: #123d78;
-            box-shadow: 0 0 0 3px #2457a71c;
-        }
-
-        .major-option:has(input:checked)::after {
-            content: "已勾選";
-            margin-left: auto;
-            padding: 3px 9px;
-            border-radius: 999px;
-            background: #174f9c;
-            color: #fff;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: .03em;
-        }
-
-        .major-option input {
-            width: 26px;
-            height: 26px;
-            accent-color: #174f9c;
-            flex: 0 0 26px;
-            cursor: pointer;
-        }
-
-        @media (max-width: 480px) {
-            .major-option {
-                padding: 12px;
-                font-size: 18px;
-            }
-            .major-option input {
-                width: 24px;
-                height: 24px;
-                flex-basis: 24px;
-            }
-        }
-
-        .major-option input,
-        .minor-option input {
-            width: 18px;
-            height: 18px;
             margin: 0;
-            flex-shrink: 0;
-            accent-color: #2457a7;
-        }
-
-        .disaster-area {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 180px;
-            flex: 1;
-        }
-
-        .disaster-area-title {
-            font-weight: bold;
-        }
-
-        #disasterNames {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-
-
-.name-row {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    width: 100%;
-    margin-bottom: 24px;
-    padding: 20px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #fff;
-    min-height: 220px;
-}
-
-
-.name-row > input.text-input {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-
-.disaster-address-options {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 4px;
-}
-
-
-.disaster-address-options label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.main-address-display,
-.other-address-input {
-    width: 100%;
-    box-sizing: border-box;
-    overflow-wrap: anywhere;
-}
-
-.name-row .remove-button {
-    align-self: flex-end;
-}
-
-
-        .name-row .text-input {
-            min-width: 0;
-            flex: 1;
-        }
-
-        button {
-            padding: 10px 14px;
-            border: none;
-            border-radius: 6px;
-            background: #2457a7;
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #183e7c;
-        }
-
-        .small-button {
-            align-self: flex-start;
-            padding: 7px 10px;
-            font-size: 14px;
-        }
-
-        .remove-button {
-            background: #777;
-            padding: 7px 10px;
-        }
-
-        .remove-button:hover {
-            background: #555;
-        }
-
-        #salvationItems {
-            display: none;
-            margin: 12px 0 18px 24px;
-            padding: 14px;
-            background: #f7f9fd;
-            border-radius: 8px;
-        }
-
-        #salvationItems p {
-            margin-top: 0;
-            font-weight: bold;
-        }
-
-        .minor-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .minor-option {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 8px;
-            line-height: 1.5;
-            cursor: pointer;
-        }
-
-        .submit-button {
-            width: 100%;
-            margin-top: 12px;
-            padding: 13px;
+            padding: 20px;
+            background: #f5f2eb;
+            color: #333;
+            font-family: "Microsoft JhengHei", sans-serif;
             font-size: 17px;
         }
 
-        #message {
-            font-weight: bold;
-            overflow-wrap: anywhere;
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
         }
 
-        #recordList {
-            padding-left: 40px;
-            overflow-wrap: anywhere;
+        .main-title {
+            text-align: center;
+            color: #8b1e1e;
+            font-size: 30px;
+            margin: 15px 0 30px;
         }
 
-        #recordList li {
-            margin-bottom: 12px;
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 22px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        @media (max-width: 480px) {
-            body {
-                margin: 10px auto;
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            form {
-                padding: 15px;
-            }
-
-            .major-items {
-                gap: 12px;
-            }
-
-            #salvationItems {
-                margin-left: 0;
-            }
+        .section-title {
+            color: #8b1e1e;
+            font-size: 22px;
+            margin: 0 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e8d5bd;
         }
-        
-.contact-row {
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-}
 
-.contact-row .field {
-    flex: 1;
-    min-width: 0;
-}
+        .hint {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.7;
+        }
 
-.contact-row .text-input {
-    box-sizing: border-box;
-    width: 100%;
-}
-
-@media (max-width: 480px) {
-    .contact-row {
-        gap: 10px;
-    }
-}
-.contact-address-section {
-    border: 2px solid #9bbad0;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    background-color: #eef6fc;
-}
-.contact-address-section .section-title {
-    margin-top: 0;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    font-size: 20px;
-    color: #333;
-}
-
-
-        /* 超薦項目：統一間距與輸入框寬度 */
-        .minor-list {
-            display: flex;
-            flex-direction: column;
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 14px;
         }
 
-
-        .minor-item-hint {
-            margin: 2px 0 4px;
-            padding: 9px 12px;
-            border-radius: 7px;
-            background: #fff4d9;
-            color: #805500;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .minor-item-hint[hidden] { display: none !important; }
-
-        .minor-item {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 10px;
-            padding: 16px;
-            border: 2px solid #8fa8bd;
-            border-left: 6px solid #567b9b;
-            border-radius: 9px;
-            background: #f8fbfd;
-            box-shadow: 0 1px 3px rgba(35, 58, 78, 0.08);
+        .option-card {
+            border: 2px solid #e0d2c0;
+            border-radius: 10px;
+            padding: 18px 12px;
+            text-align: center;
+            background: #fffdf9;
         }
 
-        .salvation-total-count {
-            margin: 4px 0 0;
-            padding: 12px 16px;
-            border: 2px solid #567b9b;
-            border-radius: 8px;
-            background: #eaf3fa;
-            color: #244967;
+        .option-card label {
+            display: block;
+            cursor: pointer;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: bold;
         }
 
-        .minor-entry {
+        .option-card input {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        .option-description {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 17px;
+            background: #fff;
+        }
+
+        .contact-row,
+        .address-row {
             display: grid;
-            grid-template-columns: 30px minmax(0, 1fr);
-            gap: 8px;
-            align-items: center;
-            width: 100%;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
-        .minor-entry-number {
-            font-weight: 700;
-            color: #345d7d;
-            text-align: right;
+        .checkbox-card {
+            border: 2px solid #e0d2c0;
+            border-radius: 10px;
+            padding: 18px;
+            background: #fffdf9;
         }
 
-        .ancestor-name-pair {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 8px;
+        .checkbox-card label {
+            cursor: pointer;
+            font-size: 19px;
+            font-weight: bold;
         }
 
-        .ancestor-address-section {
-            border-top: 2px solid #c5d4e0;
-            margin-top: 4px;
-            padding-top: 12px;
+        .checkbox-card input {
+            width: 22px;
+            height: 22px;
+            vertical-align: middle;
+            margin-right: 8px;
         }
 
-        .ancestor-address-section > .ancestor-names {
-            margin: 10px 0;
-        }
-
-        .ancestor-address-section > .add-minor-name {
-            margin: 0 0 12px;
-        }
-
-        .minor-names {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 0;
-            width: 100%;
-        }
-
-        .minor-names .text-input {
-            width: 100%;
-            min-width: 0;
-        }
-
-        /* 2-4 地基主：沿用主要住址的縣市、鄉鎮市區、詳細地址格式 */
-        .minor-address-fields {
-            display: grid;
-            /* 縣市與鄉鎮市區各自一組標籤＋選單，兩組固定同一排 */
-            grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .minor-address-fields > .ground-city,
-        .minor-address-fields > .ground-district {
-            width: 100%;
-            min-width: 0;
-        }
-
-        .same-main-address-option {
-            grid-column: 1 / -1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 0 2px;
-            font-weight: 600;
-        }
-
-        .minor-main-address-display {
-            grid-column: 1 / -1;
-            width: 100%;
-            padding: 9px 12px;
-            border: 1px solid #9bb6d8;
+        .address-mode {
+            border: 1px solid #ddd;
             border-radius: 8px;
-            background: #f0f6ff;
-            color: #24456f;
-            overflow-wrap: anywhere;
+            padding: 15px;
+            margin-top: 15px;
+            background: #fafafa;
         }
 
-        .minor-address-fields .detail-address-row {
-            grid-column: 1 / -1;
+        .address-mode label {
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .stats-box {
+            text-align: center;
+            background: #fff8e8;
+            border: 2px solid #d8bd82;
+            border-radius: 12px;
+            padding: 25px 15px;
+        }
+
+        .stats-label {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .stats-number {
+            color: #8b1e1e;
+            font-size: 42px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .disaster-entry {
+            border: 1px solid #e0d2c0;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 14px 0;
+            background: #fffdf9;
+        }
+
+        .disaster-entry-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .disaster-entry h3 {
+            margin: 0;
+            color: #8b1e1e;
+            font-size: 18px;
+        }
+
+        .disaster-name-row {
             display: grid;
-            grid-template-columns: 100px minmax(0, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .disaster-name-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+        }
+
+        .household-name-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .household-name-row {
+            display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .minor-address-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .ground-address-entry + .ground-address-entry {
-            border-top: 1px solid #b8c8d6;
-            padding-top: 12px;
-        }
-
-        .minor-address-list { counter-reset: address-entry; }
-        .ground-address-entry { counter-increment: address-entry; }
-        .ground-address-entry::before {
-            content: counter(address-entry) ".";
-            grid-column: 1 / -1;
-            color: #345d7d;
-            font-weight: 700;
-        }
-
-        @media (max-width: 480px) {
-            .ancestor-name-pair { grid-template-columns: minmax(0, 1fr); }
-        }
-
-        /* 2-5：每組歿者與陽上報恩人都有獨立編號 */
-        .minor-names[data-item="2-5"] {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .minor-names[data-item="2-5"] .minor-entry {
-            display: grid;
-            grid-template-columns: 28px minmax(0, 1fr);
-            align-items: start;
-            gap: 8px;
-        }
-
-        .minor-names[data-item="2-5"] .deceased-pair {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-            gap: 8px;
+        .household-name-row input {
+            flex: 1;
             min-width: 0;
         }
 
-        .minor-names[data-item="2-8"] {
-            display: flex;
-            flex-direction: row;
+        .add-household-name {
+            background: #426b54;
+            color: white;
+            margin-top: 8px;
+            padding: 9px 12px;
+            font-size: 15px;
+        }
+
+        .remove-household-name {
+            background: #eee;
+            color: #333;
+            padding: 8px 11px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .same-writer-label {
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: normal;
+            color: #333;
         }
 
-        .minor-names[data-item="2-8"] select {
-            width: auto;
-            min-width: 90px;
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
         }
 
-        @media (max-width: 480px) {
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #addDisaster {
+            background: #8b1e1e;
+            color: white;
+        }
+
+        .remove-disaster {
+            background: #eee;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+                font-size: 17px;
+            }
+
+            .main-title {
+                font-size: 25px;
+                line-height: 1.5;
+            }
+
+            .section {
+                padding: 17px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .option-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .option-card {
+                padding: 15px 6px;
+            }
+
+            .option-card label {
+                font-size: 16px;
+            }
+
             .contact-row {
-                flex-direction: column;
+                grid-template-columns: 1fr;
                 gap: 0;
             }
 
-            .minor-names[data-item="2-5"] .deceased-pair {
-                grid-template-columns: minmax(0, 1fr);
-            }
-            .ancestor-name-pair { grid-template-columns: minmax(0, 1fr); }
-
-            .contact-address-section {
-                padding: 14px;
-            }
-
-            .minor-address-fields {
-                grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr);
-                column-gap: 5px;
-                font-size: 13px;
-            }
-
-            .minor-address-fields .detail-address-row {
-                grid-template-columns: 88px minmax(0, 1fr);
+            .address-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
             }
         }
-
-
-        /* 牌位類別：以獨立醒目區塊呈現 */
-        .tablet-category-section {
-            padding: 18px;
-            border: 3px solid #2457a7;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #edf5ff 0%, #ffffff 100%);
-            box-shadow: 0 4px 12px #2457a71c;
-            margin-bottom: 22px;
-        }
-
-        .tablet-category-heading {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-            color: #173f7d;
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .tablet-category-heading::before {
-            content: "";
-            display: inline-block;
-            width: 6px;
-            height: 25px;
-            border-radius: 5px;
-            background: #2457a7;
-        }
-
-        .tablet-category-heading span {
-            padding: 3px 9px;
-            border-radius: 999px;
-            background: #d8e8ff;
-            color: #2457a7;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .category-options {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .category-options label {
-            display: flex;
-            align-items: center;
-            gap: 9px;
-            min-height: 48px;
-            padding: 11px 12px;
-            border: 1px solid #a9c5e8;
-            border-radius: 9px;
-            background: #fff;
-            color: #24456f;
-            font-weight: 700;
-            cursor: pointer;
-            transition: border-color .15s ease, background .15s ease;
-        }
-
-        .category-options label:has(input:checked) {
-            border: 2px solid #2457a7;
-            background: #dceaff;
-            color: #173f7d;
-            box-shadow: inset 0 0 0 1px #2457a71a;
-        }
-
-        .category-options input[type="radio"] {
-            width: 19px;
-            height: 19px;
-            margin: 0;
-            accent-color: #2457a7;
-            flex-shrink: 0;
-        }
-
-        /* 消災姓名統計：加大數字並使用醒目卡片 */
-        .disaster-name-count {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-            padding: 14px 12px;
-            border: 2px solid #d28a19;
-            border-radius: 12px;
-            background: #fff4d9;
-            color: #784500;
-            box-shadow: 0 3px 9px #a96b141c;
-            text-align: center;
-        }
-
-        .disaster-count-label {
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        .disaster-count-value {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 48px;
-            min-height: 44px;
-            padding: 2px 10px;
-            border-radius: 9px;
-            background: #a95e00;
-            color: #fff;
-            font-size: 28px;
-            line-height: 1.2;
-            font-weight: 900;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .disaster-count-unit {
-            font-size: 16px;
-            font-weight: 800;
-        }
-
-        @media (max-width: 480px) {
-            .tablet-category-section {
-                padding: 13px;
-            }
-
-            .tablet-category-heading {
-                font-size: 18px;
-            }
-
-            .category-options {
-                gap: 8px;
-            }
-
-            .category-options label {
-                padding: 10px 8px;
-                font-size: 14px;
-            }
-
-            .disaster-name-count {
-                gap: 6px;
-                padding: 12px 8px;
-            }
-
-            .disaster-count-value {
-                min-width: 42px;
-                min-height: 40px;
-                font-size: 25px;
-            }
-        }
-
-    
-
-    /* 查詢或修改資料：加強區塊辨識度 */
-    #editSection {
-      margin-top: 28px;
-      padding: 22px;
-      border: 2px solid #4b78b8;
-      border-left: 7px solid #2457a7;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #f0f6ff 0%, #ffffff 100%);
-      box-shadow: 0 4px 14px rgba(36, 87, 167, 0.12);
-    }
-
-    #editSection > label[for="searchPhone"] {
-      display: block;
-      margin: 0 0 10px;
-      color: #173f7d;
-      font-size: 1.08rem;
-      font-weight: 700;
-    }
-
-    #searchPhone {
-      display: block;
-      width: 100%;
-      max-width: 460px;
-      box-sizing: border-box;
-      margin: 0 0 14px;
-      padding: 12px 14px;
-      border: 1px solid #9db8dc;
-      border-radius: 9px;
-      background: #fff;
-      font-size: 1rem;
-    }
-
-    #searchPhone:focus {
-      outline: 3px solid rgba(36, 87, 167, 0.18);
-      border-color: #2457a7;
-    }
-
-    #searchButton {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 11px 20px;
-      border: 0;
-      border-radius: 9px;
-      background: #2457a7;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 3px 7px rgba(36, 87, 167, 0.2);
-    }
-
-    #searchButton:hover {
-      background: #173f7d;
-    }
-
-    #searchButton:focus-visible {
-      outline: 3px solid #8eb7f0;
-      outline-offset: 3px;
-    }
-
-    #searchResults,
-    #editForm {
-      margin-top: 18px;
-    }
-
-    @media (max-width: 480px) {
-      #editSection {
-        padding: 16px;
-      }
-
-      #searchPhone,
-      #searchButton {
-        width: 100%;
-        max-width: none;
-      }
-    }
-
-</style>
+    </style>
 </head>
 
 <body>
-    <h1><span>三德精舍</span><span>法會牌位登記表</span></h1>
-<!-- 修改登記資料區域 -->
+    <div class="container">
 
-    <form id="registrationForm">
-        
-<div class="field tablet-category-section">
-    <div class="tablet-category-heading">牌位類別 <span>請擇一</span></div>
-    <div class="category-options">
-        <label>
-            <input type="radio" name="tabletCategory" value="大牌位" required>
-            大牌位
-        </label>
+        <h1 class="main-title">三德精舍 法會雲端登記表</h1>
 
-        <label>
-            <input type="radio" name="tabletCategory" value="中牌位">
-            中牌位
-        </label>
+        <!-- 類別 1：牌位種類 -->
+        <section class="section">
+            <h2 class="section-title">類別 1：牌位種類</h2>
 
-        <label>
-            <input type="radio" name="tabletCategory" value="小牌位">
-            小牌位
-        </label>
+            <p class="hint">請選擇一種需要登記的牌位種類。</p>
 
-        <label>
-            <input type="radio" name="tabletCategory" value="全家小牌位">
-            全家小牌位
-        </label>
-    </div>
-</div>
+            <div class="option-grid">
 
-
-<div class="contact-address-section">
-    <h3 class="section-title">登記人資料</h3>
-
-    <div class="contact-row">
-        <div class="field">
-            <label for="name">寫牌位者：</label>
-            <input
-                class="text-input"
-                type="text"
-                id="name"
-                name="name"
-                placeholder="請輸入寫牌位者姓名"
-                required
-            >
-        </div>
-
-        <div class="field">
-            <label for="phone">聯絡電話：</label>
-            <input
-                class="text-input"
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="請輸入聯絡電話"
-                required
-            >
-        </div>
-    </div>
-
-    <div class="field">
-        <label>主要住址：</label>
-
-        <div class="address-group">
-            <label for="city">縣市：</label>
-            <select class="text-input" id="city" name="city" required>
-                <option value="">請選擇縣市</option>
-            </select>
-
-            <label for="district">鄉鎮市區：</label>
-            <select class="text-input" id="district" name="district" required disabled>
-                <option value="">請先選擇縣市</option>
-            </select>
-
-            <div class="detail-address-row">
-                <label for="detailAddress">詳細地址：</label>
-                <input
-                    class="text-input detail-address-input"
-                    type="text"
-                    id="detailAddress"
-                    name="detailAddress"
-                    placeholder="請輸入路名、巷弄、門牌號碼"
-                    required
-                >
-            </div>
-        </div>
-    </div>
-
-</div>
-
-</div>
-
-
-
-        <div class="field">
-            <div class="section-title">登記項目（可複選）：</div>
-
-            <div class="major-items">
-                <label class="major-option">
-                    <input
-                        type="checkbox"
-                        name="majorItem"
-                        value="消災"
-                        id="disaster"
-                    >
-                    <span>消災</span>
-                </label>
-
-                <div class="disaster-area">
-                    <div class="disaster-area-title">消災姓名：</div>
-
-                    <div id="disasterNames">
-                        
-<div class="name-row">
-    <span class="name-number">1.</span>
-    <input
-        class="text-input"
-        type="text"
-        name="disasterName"
-        placeholder="請輸入姓名"
-    >
-
-    <div class="disaster-address-options">
-        <label>
-            <input type="radio" name="disasterAddressType_0" value="main" checked>
-            同主要住址
-        </label>
-
-        <div class="main-address-display">
-            尚未填寫主要住址
-        </div>
-
-        <label>
-            <input type="radio" name="disasterAddressType_0" value="other">
-            其他住址
-        </label>
-
-        <input
-            class="text-input other-address-input"
-            type="text"
-            placeholder="請輸入其他住址"
-            style="display: none;"
-        >
-    </div>
-</div>
-
-                    </div>
-
-                    <button
-                        type="button"
-                        class="small-button"
-                        id="addDisasterName"
-                    >＋新增姓名</button>
-                    
-<div id="disasterNameCount" class="disaster-name-count" aria-live="polite">
-    <span class="disaster-count-label">消災姓名數量</span>
-    <span class="disaster-count-value">0</span>
-    <span class="disaster-count-unit">位</span>
-</div>
-
+                <div class="option-card">
+                    <label>
+                        <input type="radio" name="tabletType" value="大牌位">
+                        大牌位
+                    </label>
                 </div>
 
-                <label class="major-option">
+                <div class="option-card">
+                    <label>
+                        <input type="radio" name="tabletType" value="中牌位">
+                        中牌位
+                    </label>
+                </div>
+
+                <div class="option-card">
+                    <label>
+                        <input type="radio" name="tabletType" value="小牌位">
+                        小牌位
+                    </label>
+                </div>
+
+                <div class="option-card">
+                    <label>
+                        <input type="radio" name="tabletType" value="全家牌位">
+                        全家牌位
+                    </label>
+                    <div class="option-description">
+                        消災與超薦合計 30 支
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 類別 2：牌位填寫人資料 -->
+        <section class="section">
+            <h2 class="section-title">類別 2：牌位填寫人資料</h2>
+
+            <div class="contact-row">
+
+                <div class="form-group">
+                    <label for="writerName">寫牌位者姓名</label>
                     <input
-                        type="checkbox"
-                        name="majorItem"
-                        value="超薦"
-                        id="salvation"
+                        type="text"
+                        id="writerName"
+                        placeholder="請輸入姓名"
                     >
-                    <span>超薦</span>
-                </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="writerPhone">手機號碼</label>
+                    <input
+                        type="tel"
+                        id="writerPhone"
+                        placeholder="請輸入手機號碼"
+                    >
+                </div>
+
             </div>
 
-            <div id="salvationItems">
-                <p>超薦小項目（可複選）：</p>
+            <div class="address-row">
+                <div class="form-group">
+                    <label for="mainCity">縣市</label>
 
-                
-<div class="minor-list">
-
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-1 個人累世冤親債主">
-            <span>2-1 個人累世冤親債主</span>
-        </label>
-        <div class="minor-names" data-item="2-1">
-            <div class="minor-entry"><span class="minor-entry-number">1.</span><input class="text-input minor-name-input" type="text" placeholder="敬薦人"></div>
-        </div>
-        <button type="button" class="small-button add-minor-name" data-target="2-1">＋新增</button>
-    </div>
-
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-2 累世今生所食所傷眾生">
-            <span>2-2 累世今生所食所傷眾生</span>
-        </label>
-        <div class="minor-names" data-item="2-2">
-            <div class="minor-entry"><span class="minor-entry-number">1.</span><input class="text-input minor-name-input" type="text" placeholder="敬薦人"></div>
-        </div>
-        <button type="button" class="small-button add-minor-name" data-target="2-2">＋新增</button>
-    </div>
-
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-3 歷代祖先">
-            <span>2-3 歷代祖先</span>
-        </label>
-        <div class="ancestor-address-section">
-            <div class="minor-address-list ancestor-address-list" data-item="2-3">
-                <div class="minor-names minor-address-fields ground-address-entry ancestor-address-entry">
-                    <div class="detail-address-row">
-                        <label for="ancestorSurname1">祖先姓氏：</label>
-                        <input class="text-input ancestor-surname" type="text" id="ancestorSurname1" name="ancestorSurname1" placeholder="請輸入祖先姓氏">
-                    </div>
-                    <label class="same-main-address-option">
-                        <input type="checkbox" class="same-main-address-checkbox">
-                        同主要住址
-                    </label>
-                    <div class="minor-main-address-display" style="display:none">尚未填寫主要住址</div>
-                    <label class="address-city-label" for="ancestorCity1">縣市：</label>
-                    <select class="text-input ground-city" id="ancestorCity1" name="ancestorCity1">
+                    <select id="mainCity">
                         <option value="">請選擇縣市</option>
                     </select>
-                    <label class="address-district-label" for="ancestorDistrict1">鄉鎮市區：</label>
-                    <select class="text-input ground-district" id="ancestorDistrict1" name="ancestorDistrict1" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="mainDistrict">鄉鎮市區</label>
+
+                    <select id="mainDistrict">
                         <option value="">請先選擇縣市</option>
                     </select>
-                    <div class="detail-address-row address-detail-row">
-                        <label for="ancestorDetailAddress1">詳細地址：</label>
-                        <input class="text-input detail-address-input ground-detail-address" type="text" id="ancestorDetailAddress1" name="ancestorDetailAddress1" placeholder="請輸入路名、巷弄、門牌號碼">
-                    </div>
-                    <div class="detail-address-row">
-                        <label for="ancestorBenefactor1">陽上報恩人：</label>
-                        <input class="text-input ancestor-benefactor" type="text" id="ancestorBenefactor1" name="ancestorBenefactor1" placeholder="陽上報恩人">
-                    </div>
                 </div>
             </div>
-            <button type="button" class="small-button add-ancestor-address">＋新增</button>
-        </div>
-    </div>
 
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-4 地基主">
-            <span>2-4 地基主</span>
-        </label>
-        <div class="minor-address-list" data-item="2-4">
-            <div class="minor-names minor-address-fields ground-address-entry">
-                <label class="same-main-address-option">
-                    <input type="checkbox" class="same-main-address-checkbox">
-                    同主要住址
+            <div class="form-group">
+                <label for="mainAddress">詳細地址</label>
+
+                <input
+                    type="text"
+                    id="mainAddress"
+                    placeholder="請輸入路名、巷弄及門牌號碼"
+                >
+            </div>
+        </section>
+
+        <!-- 類別 3：消災代表 -->
+        <section class="section">
+            <h2 class="section-title">類別 3：消災代表</h2>
+
+            <div class="checkbox-card">
+                <label>
+                    <input
+                        type="checkbox"
+                        id="enableDisaster"
+                    >
+                    消災牌位
                 </label>
-                <div class="minor-main-address-display" style="display:none">尚未填寫主要住址</div>
-                <label class="address-city-label" for="groundCity">縣市：</label>
-                <select class="text-input ground-city" id="groundCity" name="groundCity">
-                    <option value="">請選擇縣市</option>
-                </select>
 
-                <label class="address-district-label" for="groundDistrict">鄉鎮市區：</label>
-                <select class="text-input ground-district" id="groundDistrict" name="groundDistrict" disabled>
-                    <option value="">請先選擇縣市</option>
-                </select>
+                <p class="hint">
+                    勾選消災牌位後，才能開始新增消災代表資料。
+                </p>
+            </div>
 
-                <div class="detail-address-row address-detail-row">
-                    <label for="groundDetailAddress">詳細地址：</label>
-                    <input class="text-input detail-address-input ground-detail-address" type="text" id="groundDetailAddress" name="groundDetailAddress" placeholder="請輸入路名、巷弄、門牌號碼">
+            <div id="disasterArea" hidden>
+                <p class="hint">
+                    請填寫消災代表姓名與住址。同一住址只計算一張消災牌位。
+                </p>
+
+                <div id="disasterList"></div>
+
+                <div class="button-row">
+                    <button type="button" id="addDisaster">
+                        ＋ 新增消災代表
+                    </button>
                 </div>
-                <div class="detail-address-row">
-                    <label for="groundRecommender">敬薦人：</label>
-                    <input class="text-input ground-recommender" type="text" id="groundRecommender" name="groundRecommender" placeholder="敬薦人">
+            </div>
+        </section>
+
+        <!-- 類別 4：牌位數量統計 -->
+        <section class="section">
+            <h2 class="section-title">類別 4：牌位數量統計</h2>
+
+            <div class="stats-box">
+                <div class="stats-label">
+                    消災牌位總數
                 </div>
+
+                <div class="stats-number" id="disasterCount">
+                    0
+                </div>
+
+                <p class="hint">
+                    以不同住址為統計單位，同一戶只計算一張。
+                </p>
             </div>
-        </div>
-        <button type="button" class="small-button add-minor-name" data-target="2-4">＋新增</button>
+        </section>
+
+        <!-- 類別 5：送出登記 -->
+        <section class="section">
+            <h2 class="section-title">類別 5：送出登記</h2>
+            <p class="hint">送出前請確認牌位種類、填寫人資料及消災代表資料。</p>
+            <div id="submitStatus" class="hint" role="status" aria-live="polite"></div>
+            <button type="button" id="submitRegistration" style="background:#8b1e1e;color:#fff;font-weight:bold;padding:14px 22px;">送出登記</button>
+        </section>
+
+        <iframe name="registrationResponseFrame" id="registrationResponseFrame" title="登記回覆" hidden></iframe>
+        <form id="registrationTransportForm" method="post" target="registrationResponseFrame" action="https://script.google.com/macros/s/AKfycbzlXWZ32YgkcOGkkHdEoJ03f3dl0Br8ezB2vB613_MbNLLzuDctMRaJhMzctQwf6cPo/exec" hidden>
+            <input type="hidden" name="payload" id="registrationPayload">
+        </form>
+
     </div>
-
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-5 已過世親人">
-            <span>2-5 已過世親人(歿)</span>
-        </label>
-<div class="minor-names" data-item="2-5">
-    <div class="minor-entry">
-        <span class="minor-entry-number">1.</span>
-        <div class="deceased-pair">
-            <input class="text-input minor-name-input" type="text" placeholder="請輸入姓名（歿）">
-            <input class="text-input minor-name-input" type="text" placeholder="陽上報恩人">
-        </div>
-    </div>
-</div>
-        
-        <button type="button" class="small-button add-minor-name" data-target="2-5">＋新增</button>
-    </div>
-
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-6 墮胎流產嬰靈夭折無緣子女">
-            <span>2-6 墮胎流產嬰靈夭折無緣子女</span>
-        </label>
-        <div class="minor-names" data-item="2-6">
-            <div class="minor-entry">
-                <span class="minor-entry-number">1.</span>
-                <input class="text-input minor-name-input" type="text" placeholder="敬薦人">
-            </div>
-        </div>
-        <button type="button" class="small-button add-minor-name" data-target="2-6">＋新增</button>
-    </div>
-
-    <div class="minor-item">
-        <label class="minor-option">
-            <input type="checkbox" name="minorItem" value="2-7 其他（寵物）">
-            <span>2-7 其他（寵物）</span>
-        </label>
-        <div class="minor-names" data-item="2-7">
-            <div class="minor-entry">
-                <span class="minor-entry-number">1.</span>
-                <input class="text-input minor-name-input" type="text" placeholder="請輸入名字或寵物名稱">
-            </div>
-        </div>
-        <button type="button" class="small-button add-minor-name" data-target="2-7">＋新增</button>
-    </div>
-
-
-<div id="salvationTotalCount" class="salvation-total-count" aria-live="polite">超薦總數量：0 位</div>
-
-<div class="minor-item">
-    <label class="minor-option">
-        <input type="checkbox" name="minorItem" value="2-8 普桌">
-        <span>2-8 普桌</span>
-    </label>
-
-    <div class="minor-names" data-item="2-8">
-        <label for="publicTableCount">普桌數量：</label>
-        <select
-            class="text-input"
-            id="publicTableCount"
-            name="publicTableCount"
-        >
-            <option value="0" selected>0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-        </select>
-    </div>
-</div>
-
-
-</div>
-
-            </div>
-        </div>
-
-        <button type="submit" class="submit-button">送出登記</button>
-    </form>
-    <div id="editSection">
-
-
-  <label for="searchPhone">請輸入聯絡電話：</label>
-  <input
-    type="tel"
-    id="searchPhone"
-    placeholder="請輸入登記時的電話"
-  >
-
-<button type="button" id="searchButton">
-    查詢或修改資料
-</button>
-
-  <div id="searchResults"></div>
-  <div id="editForm" style="display:none; margin-top:20px;">
-  <h3>編輯登記資料</h3>
-<label for="editAdminPassword">管理密碼</label>
-<input
-  type="password"
-  id="editAdminPassword"
-  placeholder="請輸入管理密碼"
-  autocomplete="current-password"
->
-  <input type="hidden" id="editRowNumber">
-
-  <label>姓名</label>
-  <input type="text" id="editName">
-
-  <label>聯絡電話</label>
-  <input type="tel" id="editPhone">
-
-  <label>登記項目</label>
-  <input type="text" id="editItem">
-
-  <label>流水號</label>
-  <input type="text" id="editSerial">
-
-  <label>消災姓名</label>
-  <input type="text" id="editDisasterName">
-
-  <label>地址</label>
-  <input type="text" id="editAddress">
-
-  <label>牌位類別</label>
-  <select id="editTabletCategory">
-    <option value="">請選擇</option>
-    <option value="大牌位">大牌位</option>
-    <option value="中牌位">中牌位</option>
-    <option value="小牌位">小牌位</option>
-    <option value="全家小牌位">全家小牌位</option>
-  </select>
-
-  <button type="button" id="saveEditButton">儲存修改</button>
-  <button type="button" id="cancelEditButton">取消</button>
-</div>
-</div>
-
-    <p id="message" role="status"></p>
-
-    <h2>本機登記紀錄</h2>
-    <ul id="recordList"></ul>
 
     <script>
-        const form = document.getElementById("registrationForm");
-        const salvationCheckbox = document.getElementById("salvation");
-        const salvationItems = document.getElementById("salvationItems");
-        const disasterNames = document.getElementById("disasterNames");
-        const addDisasterNameButton = document.getElementById("addDisasterName");
-        const message = document.getElementById("message");
-        const recordList = document.getElementById("recordList");
+        const enableDisaster = document.getElementById("enableDisaster");
+        const disasterArea = document.getElementById("disasterArea");
+        const disasterList = document.getElementById("disasterList");
+        const addDisasterButton = document.getElementById("addDisaster");
+        const disasterCount = document.getElementById("disasterCount");
 
-        // 提前綁定超薦開關，避免後續初始化程式出錯時，超薦按鈕完全沒有反應。
-        salvationCheckbox.addEventListener("change", function () {
-            salvationItems.style.display = this.checked ? "block" : "none";
+        // 勾選消災牌位後才顯示資料區；取消勾選時清空資料並重設統計。
+        enableDisaster.addEventListener("change", () => {
+            disasterArea.hidden = !enableDisaster.checked;
 
-            if (!this.checked) {
-                document.querySelectorAll('input[name="minorItem"]').forEach(function (checkbox) {
-                    checkbox.checked = false;
-                });
+            if (enableDisaster.checked && disasterList.children.length === 0) {
+                addDisasterEntry();
             }
 
-            if (typeof syncAllOptionControls === "function") syncAllOptionControls();
-            if (typeof updateSalvationTotalCount === "function") updateSalvationTotalCount();
-        });
-
-        // 頁面載入時，顯示狀態與超薦勾選狀態保持一致。
-        salvationItems.style.display = salvationCheckbox.checked ? "block" : "none";
-
-        const scriptUrl =
-            "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec";
-
-        let records = [];
-
-        // 各類別必須先勾選，該類別的輸入欄位與新增按鈕才可使用。
-        function syncMinorItemControls(item) {
-            if (!item) return;
-            const checkbox = item.querySelector('input[name="minorItem"]');
-            const enabled = Boolean(checkbox && checkbox.checked);
-            let hint = item.querySelector('.minor-item-hint');
-            if (!hint) {
-                hint = document.createElement('div');
-                hint.className = 'minor-item-hint';
-                hint.textContent = '請先勾選此項目，才能輸入資料或按「＋新增」。';
-                if (checkbox) {
-                    const optionLabel = checkbox.closest('.minor-option');
-                    if (optionLabel) optionLabel.insertAdjacentElement('afterend', hint);
-                    else item.insertBefore(hint, item.firstChild);
-                } else {
-                    item.insertBefore(hint, item.firstChild);
-                }
+            if (!enableDisaster.checked) {
+                disasterList.innerHTML = "";
+                updateDisasterCount();
             }
-            hint.hidden = enabled;
-            item.querySelectorAll('.same-main-address-checkbox').forEach(function (control) {
-                control.disabled = !enabled;
-            });
-            item.querySelectorAll('input:not([type="checkbox"]), select, textarea, button').forEach(function (control) {
-                if (!enabled) {
-                    control.disabled = true;
-                    return;
-                }
-                if (control.classList.contains('ground-district')) {
-                    const addressEntry = control.closest('.ground-address-entry');
-                    const city = addressEntry ? addressEntry.querySelector('.ground-city') : null;
-                    control.disabled = !city || !city.value;
-                } else {
-                    control.disabled = false;
-                }
-            });
-        }
-
-        function syncDisasterAreaControls() {
-            const disasterCheckbox = document.getElementById('disaster');
-            const enabled = Boolean(disasterCheckbox && disasterCheckbox.checked);
-            const area = document.querySelector('.disaster-area');
-            if (!area) return;
-            area.querySelectorAll('input, select, textarea, button').forEach(function (control) {
-                control.disabled = !enabled;
-            });
-        }
-
-        function syncAllOptionControls() {
-            document.querySelectorAll('.minor-item').forEach(syncMinorItemControls);
-            syncDisasterAreaControls();
-        }
-        
-const cityDistricts = {
-    "臺北市": ["中正區", "大同區", "中山區", "松山區", "大安區", "萬華區", "信義區", "士林區", "北投區", "內湖區", "南港區", "文山區"],
-    "新北市": ["板橋區", "三重區", "中和區", "永和區", "新莊區", "新店區", "土城區", "蘆洲區", "樹林區", "汐止區", "淡水區", "林口區", "三峽區", "鶯歌區", "五股區", "泰山區", "八里區", "深坑區", "石碇區", "坪林區", "三芝區", "石門區", "金山區", "萬里區", "瑞芳區", "貢寮區", "雙溪區", "平溪區", "烏來區"],
-    "桃園市": ["桃園區", "中壢區", "大溪區", "楊梅區", "蘆竹區", "大園區", "龜山區", "八德區", "龍潭區", "平鎮區", "新屋區", "觀音區", "復興區"],
-    "臺中市": ["中區", "東區", "南區", "西區", "北區", "西屯區", "南屯區", "北屯區", "豐原區", "大里區", "太平區", "清水區", "沙鹿區", "大甲區", "東勢區", "梧棲區", "烏日區", "神岡區", "大肚區", "大雅區", "后里區", "霧峰區", "潭子區", "龍井區", "外埔區", "和平區", "石岡區", "大安區", "新社區"],
-    "臺南市": ["中西區", "東區", "南區", "北區", "安平區", "安南區", "永康區", "歸仁區", "新化區", "左鎮區", "玉井區", "楠西區", "南化區", "仁德區", "關廟區", "龍崎區", "官田區", "麻豆區", "佳里區", "西港區", "七股區", "將軍區", "學甲區", "北門區", "新營區", "後壁區", "白河區", "東山區", "六甲區", "下營區", "柳營區", "鹽水區", "善化區", "大內區", "山上區", "新市區", "安定區"],
-    "高雄市": ["新興區", "前金區", "苓雅區", "鹽埕區", "鼓山區", "旗津區", "前鎮區", "三民區", "左營區", "楠梓區", "小港區", "鳳山區", "大寮區", "鳥松區", "仁武區", "大社區", "岡山區", "路竹區", "阿蓮區", "田寮區", "燕巢區", "橋頭區", "梓官區", "彌陀區", "永安區", "湖內區", "旗山區", "美濃區", "六龜區", "甲仙區", "杉林區", "內門區", "茂林區", "桃源區", "那瑪夏區"],
-    "基隆市": ["仁愛區", "信義區", "中正區", "中山區", "安樂區", "暖暖區", "七堵區"],
-    "新竹市": ["東區", "北區", "香山區"],
-    "嘉義市": ["東區", "西區"],
-    "新竹縣": ["竹北市", "竹東鎮", "新埔鎮", "關西鎮", "湖口鄉", "新豐鄉", "芎林鄉", "橫山鄉", "北埔鄉", "寶山鄉", "峨眉鄉", "尖石鄉", "五峰鄉"],
-    "苗栗縣": ["苗栗市", "頭份市", "竹南鎮", "後龍鎮", "通霄鎮", "苑裡鎮", "卓蘭鎮", "造橋鄉", "頭屋鄉", "公館鄉", "銅鑼鄉", "三義鄉", "西湖鄉", "大湖鄉", "獅潭鄉", "三灣鄉", "南庄鄉", "泰安鄉"],
-    "彰化縣": ["彰化市", "員林市", "鹿港鎮", "和美鎮", "溪湖鎮", "田中鎮", "北斗鎮", "二林鎮", "線西鄉", "伸港鄉", "福興鄉", "秀水鄉", "花壇鄉", "芬園鄉", "大村鄉", "埔鹽鄉", "埔心鄉", "永靖鄉", "社頭鄉", "二水鄉", "田尾鄉", "埤頭鄉", "芳苑鄉", "大城鄉", "竹塘鄉", "溪州鄉"],
-    "南投縣": ["南投市", "埔里鎮", "草屯鎮", "竹山鎮", "集集鎮", "名間鄉", "鹿谷鄉", "中寮鄉", "魚池鄉", "國姓鄉", "水里鄉", "信義鄉", "仁愛鄉"],
-    "雲林縣": ["斗六市", "斗南鎮", "虎尾鎮", "西螺鎮", "土庫鎮", "北港鎮", "古坑鄉", "大埤鄉", "莿桐鄉", "林內鄉", "二崙鄉", "崙背鄉", "麥寮鄉", "東勢鄉", "褒忠鄉", "臺西鄉", "元長鄉", "四湖鄉", "口湖鄉", "水林鄉"],
-    "嘉義縣": ["太保市", "朴子市", "布袋鎮", "大林鎮", "民雄鄉", "溪口鄉", "新港鄉", "六腳鄉", "東石鄉", "義竹鄉", "鹿草鄉", "水上鄉", "中埔鄉", "竹崎鄉", "梅山鄉", "番路鄉", "大埔鄉", "阿里山鄉"],
-    "屏東縣": ["屏東市", "潮州鎮", "東港鎮", "恆春鎮", "萬丹鄉", "長治鄉", "麟洛鄉", "九如鄉", "里港鄉", "鹽埔鄉", "高樹鄉", "萬巒鄉", "內埔鄉", "竹田鄉", "新埤鄉", "枋寮鄉", "新園鄉", "崁頂鄉", "林邊鄉", "南州鄉", "佳冬鄉", "琉球鄉", "車城鄉", "滿州鄉", "枋山鄉", "三地門鄉", "霧臺鄉", "瑪家鄉", "泰武鄉", "來義鄉", "春日鄉", "獅子鄉", "牡丹鄉"],
-    "宜蘭縣": ["宜蘭市", "羅東鎮", "蘇澳鎮", "頭城鎮", "礁溪鄉", "壯圍鄉", "員山鄉", "冬山鄉", "五結鄉", "三星鄉", "大同鄉", "南澳鄉"],
-    "花蓮縣": ["花蓮市", "鳳林鎮", "玉里鎮", "新城鄉", "吉安鄉", "壽豐鄉", "光復鄉", "豐濱鄉", "瑞穗鄉", "富里鄉", "秀林鄉", "萬榮鄉", "卓溪鄉"],
-    "臺東縣": ["臺東市", "成功鎮", "關山鎮", "卑南鄉", "鹿野鄉", "池上鄉", "東河鄉", "長濱鄉", "太麻里鄉", "大武鄉", "綠島鄉", "海端鄉", "延平鄉", "金峰鄉", "達仁鄉", "蘭嶼鄉"],
-    "澎湖縣": ["馬公市", "湖西鄉", "白沙鄉", "西嶼鄉", "望安鄉", "七美鄉"],
-    "金門縣": ["金城鎮", "金湖鎮", "金沙鎮", "金寧鄉", "烈嶼鄉", "烏坵鄉"],
-    "連江縣": ["南竿鄉", "北竿鄉", "莒光鄉", "東引鄉"]
-};
-
-const citySelect = document.getElementById("city");
-const districtSelect = document.getElementById("district");
-const detailAddressInput = document.getElementById("detailAddress");
-const groundCitySelect = document.getElementById("groundCity");
-const groundDistrictSelect = document.getElementById("groundDistrict");
-
-function updateDisasterNameNumbers() {
-    const rows = document.querySelectorAll("#disasterNames .name-row");
-
-    rows.forEach(function (row, index) {
-        const number = row.querySelector(".name-number");
-
-        if (number) {
-            number.textContent = (index + 1) + ".";
-        }
-    });
-}
-
-// 統計已勾選的超薦類別中，實際填寫的敬薦人／陽上報恩人／寵物名稱數量。
-function updateSalvationTotalCount() {
-    let total = 0;
-    const countFilled = function (selector) {
-        document.querySelectorAll(selector).forEach(function (input) {
-            if (input.value.trim() !== "") total++;
         });
-    };
-    const isChecked = function (itemId) {
-        const checkbox = document.querySelector('.minor-item input[name="minorItem"][value^="' + itemId + '"]');
-        return Boolean(checkbox && checkbox.checked);
-    };
 
-    if (isChecked("2-1")) countFilled('.minor-names[data-item="2-1"] .minor-name-input');
-    if (isChecked("2-2")) countFilled('.minor-names[data-item="2-2"] .minor-name-input');
-    if (isChecked("2-3")) countFilled('.ancestor-address-list[data-item="2-3"] .ancestor-benefactor');
-    if (isChecked("2-4")) countFilled('.minor-address-list[data-item="2-4"] .ground-recommender');
-    if (isChecked("2-5")) countFilled('.minor-names[data-item="2-5"] .deceased-pair input:nth-child(2)');
-    if (isChecked("2-6")) countFilled('.minor-names[data-item="2-6"] .minor-name-input');
-    if (isChecked("2-7")) countFilled('.minor-names[data-item="2-7"] .minor-name-input');
+        // 新增一筆消災代表資料。
+        addDisasterButton.addEventListener("click", addDisasterEntry);
 
-    const display = document.getElementById("salvationTotalCount");
-    if (display) display.textContent = "超薦總數量：" + total + " 位";
-}
-
-document.addEventListener("input", function (event) {
-    if (event.target.closest("#salvationItems")) updateSalvationTotalCount();
-});
-
-function updateDisasterNameCount() {
-    const nameInputs = document.querySelectorAll(
-        '#disasterNames input[name="disasterName"]'
-    );
-
-    let count = 0;
-
-    nameInputs.forEach(function (input) {
-        if (input.value.trim() !== "") {
-            count++;
-        }
-    });
-
-    const countDisplay = document.getElementById("disasterNameCount");
-
-    if (countDisplay) {
-        countDisplay.innerHTML = '<span class="disaster-count-label">消災姓名數量</span>' +
-            '<span class="disaster-count-value">' + count + '</span>' +
-            '<span class="disaster-count-unit">位</span>';
-    }
-}
-document.getElementById("disasterNames").addEventListener("input", function (event) {
-    if (event.target.name === "disasterName") {
-        updateDisasterNameCount();
-    }
-});
-
-updateDisasterNameCount();
-
-
-document.querySelectorAll(".add-minor-name").forEach(function (button) {
-    button.addEventListener("click", function () {
-        const itemId = button.dataset.target;
-        const container = itemId === "2-4"
-            ? document.querySelector('.minor-address-list[data-item="2-4"]')
-            : document.querySelector('.minor-names[data-item="' + itemId + '"]');
-
-        if (!container) {
-            return;
-        }
-
-        if (itemId === "2-4") {
-            // 地基主每按一次新增，就複製一組完整的縣市、鄉鎮市區、詳細地址欄位。
-            const entry = container.querySelector('.ground-address-entry').cloneNode(true);
-            const index = container.querySelectorAll('.ground-address-entry').length + 1;
-            const city = entry.querySelector('.ground-city');
-            const district = entry.querySelector('.ground-district');
-            const detail = entry.querySelector('.ground-detail-address');
-            const recommender = entry.querySelector('.ground-recommender');
-            city.id = 'groundCity' + index;
-            city.name = 'groundCity' + index;
-            district.id = 'groundDistrict' + index;
-            district.name = 'groundDistrict' + index;
-            detail.id = 'groundDetailAddress' + index;
-            detail.name = 'groundDetailAddress' + index;
-            recommender.id = 'groundRecommender' + index;
-            recommender.name = 'groundRecommender' + index;
-            entry.querySelector('label[for="groundCity"]').htmlFor = city.id;
-            entry.querySelector('label[for="groundDistrict"]').htmlFor = district.id;
-            entry.querySelector('label[for="groundDetailAddress"]').htmlFor = detail.id;
-            entry.querySelector('label[for="groundRecommender"]').htmlFor = recommender.id;
-            city.value = '';
-            district.innerHTML = '<option value="">請先選擇縣市</option>';
-            district.disabled = true;
-            detail.value = '';
-            recommender.value = '';
-            container.appendChild(entry);
-            syncMinorItemControls(button.closest('.minor-item'));
-            updateSalvationTotalCount();
-            populateGroundCities(city);
-            city.addEventListener('change', function () {
-                populateGroundDistricts(city, district);
-            });
-            city.focus();
-        } else if (itemId === "2-5") {
-            // 2-5 每按一次「新增」，增加一組帶有連續編號的歿者姓名與陽上報恩人。
+        function addDisasterEntry() {
+            const number = disasterList.children.length + 1;
             const entry = document.createElement("div");
-            entry.className = "minor-entry";
+            entry.className = "disaster-entry";
 
-            const number = document.createElement("span");
-            number.className = "minor-entry-number";
-            number.textContent = (container.querySelectorAll(".minor-entry").length + 1) + ".";
+            entry.innerHTML = `
+                <div class="disaster-entry-heading">
+                    <h3>消災代表 ${number}</h3>
+                    <label class="same-writer-label">
+                        <input type="checkbox" class="same-as-writer">
+                        同牌位填寫人
+                    </label>
+                </div>
+                <div class="disaster-name-row">
+                    <div class="form-group">
+                        <label>消災代表姓名</label>
+                        <input type="text" class="disaster-name" placeholder="請輸入消災代表姓名">
+                    </div>
+                    <div class="form-group">
+                        <label>同戶姓名</label>
+                        <div class="household-name-list">
+                            <div class="household-name-row">
+                                <input type="text" class="same-household-names" placeholder="請輸入同戶姓名（選填）">
+                            </div>
+                        </div>
+                        <button type="button" class="add-household-name">＋ 新增住戶</button>
+                    </div>
+                </div>
 
-            const pair = document.createElement("div");
-            pair.className = "deceased-pair";
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" class="use-main-address">
+                        同主要地址
+                    </label>
+                </div>
 
-            const deceasedInput = document.createElement("input");
-            deceasedInput.type = "text";
-            deceasedInput.className = "text-input minor-name-input";
-            deceasedInput.placeholder = "請輸入姓名（歿）";
+                <div class="main-address-preview" hidden>
+                    <p class="hint">此筆將使用類別 2 填寫的主要地址：</p>
+                    <div class="address-preview-text"></div>
+                </div>
 
-            const benefactorInput = document.createElement("input");
-            benefactorInput.type = "text";
-            benefactorInput.className = "text-input minor-name-input";
-            benefactorInput.placeholder = "陽上報恩人";
+                <div class="custom-disaster-address">
+                    <p class="hint">或自行填寫此消災代表的住址（選填，不必填寫完整也可先繼續）。</p>
+                    <div class="address-row">
+                        <div class="form-group">
+                            <label>縣市</label>
+                            <select class="disaster-city">
+                                <option value="">請選擇縣市</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>鄉鎮市區</label>
+                            <select class="disaster-district">
+                                <option value="">請先選擇縣市</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>詳細地址</label>
+                        <input type="text" class="disaster-detail-address" placeholder="請輸入路名、巷弄及門牌號碼（選填）">
+                    </div>
+                </div>
 
-            pair.append(deceasedInput, benefactorInput);
-            entry.append(number, pair);
-            container.appendChild(entry);
-            syncMinorItemControls(button.closest('.minor-item'));
-            updateSalvationTotalCount();
-            deceasedInput.focus();
-        } else {
-            const entry = document.createElement("div");
-            entry.className = "minor-entry";
-            const number = document.createElement("span");
-            number.className = "minor-entry-number";
-            number.textContent = (container.querySelectorAll(".minor-entry").length + 1) + ".";
-            const input = document.createElement("input");
-            input.type = "text";
-            input.className = "text-input minor-name-input";
-            input.placeholder = (itemId === "2-1" || itemId === "2-2" || itemId === "2-6")
-                ? "敬薦人"
-                : itemId === "2-7"
-                    ? "請輸入名字或寵物名稱"
-                    : "請輸入姓名";
-            entry.append(number, input);
-            container.appendChild(entry);
-            syncMinorItemControls(button.closest('.minor-item'));
-            updateSalvationTotalCount();
-            input.focus();
-        }
-    });
-});
+                <div class="button-row">
+                    <button type="button" class="remove-disaster">刪除此筆</button>
+                </div>
+            `;
 
-document.querySelectorAll(".add-ancestor-address").forEach(function (button) {
-    button.addEventListener("click", function () {
-        const container = document.querySelector('.ancestor-address-list[data-item="2-3"]');
-        const template = container.querySelector('.ancestor-address-entry');
-        const entry = template.cloneNode(true);
-        const index = container.querySelectorAll('.ancestor-address-entry').length + 1;
-        const surname = entry.querySelector('.ancestor-surname');
-        const city = entry.querySelector('.ground-city');
-        const district = entry.querySelector('.ground-district');
-        const detail = entry.querySelector('.ground-detail-address');
-        const benefactor = entry.querySelector('.ancestor-benefactor');
-        const surnameLabel = entry.querySelector('label[for="ancestorSurname1"]');
-        const cityLabel = entry.querySelector('label[for="ancestorCity1"]');
-        const districtLabel = entry.querySelector('label[for="ancestorDistrict1"]');
-        const detailLabel = entry.querySelector('label[for="ancestorDetailAddress1"]');
-        const benefactorLabel = entry.querySelector('label[for="ancestorBenefactor1"]');
-        surname.id = 'ancestorSurname' + index; surname.name = surname.id;
-        city.id = 'ancestorCity' + index; city.name = city.id;
-        district.id = 'ancestorDistrict' + index; district.name = district.id;
-        detail.id = 'ancestorDetailAddress' + index; detail.name = detail.id;
-        benefactor.id = 'ancestorBenefactor' + index; benefactor.name = benefactor.id;
-        surnameLabel.htmlFor = surname.id;
-        cityLabel.htmlFor = city.id;
-        districtLabel.htmlFor = district.id;
-        detailLabel.htmlFor = detail.id;
-        benefactorLabel.htmlFor = benefactor.id;
-        surname.value = '';
-        city.value = '';
-        district.innerHTML = '<option value="">請先選擇縣市</option>';
-        district.disabled = true;
-        detail.value = '';
-        benefactor.value = '';
-        container.appendChild(entry);
-        syncMinorItemControls(button.closest('.minor-item'));
-        updateSalvationTotalCount();
-        populateGroundCities(city);
-        city.addEventListener('change', function () { populateGroundDistricts(city, district); });
-        surname.focus();
-    });
-});
+            const useMainAddress = entry.querySelector(".use-main-address");
+            const sameAsWriter = entry.querySelector(".same-as-writer");
+            const disasterName = entry.querySelector(".disaster-name");
+            const mainAddressPreview = entry.querySelector(".main-address-preview");
+            const customAddressArea = entry.querySelector(".custom-disaster-address");
 
-function updateMainAddressDisplay() {
-    const city = citySelect.value;
-    const district = districtSelect.value;
-    const detail = detailAddressInput.value.trim();
-
-    const address = [city, district, detail]
-        .filter(Boolean)
-        .join("");
-
-    document.querySelectorAll(".main-address-display, .minor-main-address-display").forEach(function (display) {
-        display.textContent = address || "尚未填寫主要住址";
-    });
-}
-
-function syncSameMainAddressEntry(entry) {
-    if (!entry) return;
-    const checkbox = entry.querySelector('.same-main-address-checkbox');
-    const display = entry.querySelector('.minor-main-address-display');
-    const useMain = Boolean(checkbox && checkbox.checked);
-    const addressParts = entry.querySelectorAll('.address-city-label, .address-district-label, .ground-city, .ground-district, .address-detail-row');
-    addressParts.forEach(function (part) {
-        part.style.display = useMain ? 'none' : '';
-    });
-    if (display) {
-        display.style.display = useMain ? 'block' : 'none';
-    }
-}
-
-document.querySelectorAll('.minor-address-list .ground-address-entry').forEach(function (entry) {
-    const checkbox = entry.querySelector('.same-main-address-checkbox');
-    if (checkbox) {
-        checkbox.addEventListener('change', function () { syncSameMainAddressEntry(entry); });
-    }
-});
-
-document.querySelectorAll('.minor-address-list').forEach(function (list) {
-    list.addEventListener('change', function (event) {
-        if (!event.target.classList.contains('same-main-address-checkbox')) return;
-        syncSameMainAddressEntry(event.target.closest('.ground-address-entry'));
-    });
-});
-
-citySelect.addEventListener("change", updateMainAddressDisplay);
-districtSelect.addEventListener("change", updateMainAddressDisplay);
-detailAddressInput.addEventListener("input", updateMainAddressDisplay);
-
-updateMainAddressDisplay();
-
-disasterNames.addEventListener("change", function (event) {
-    if (event.target.type !== "radio") {
-        return;
-    }
-
-    const row = event.target.closest(".name-row");
-
-    if (!row) {
-        return;
-    }
-
-    const mainAddressDisplay = row.querySelector(".main-address-display");
-    const otherAddressInput = row.querySelector(".other-address-input");
-    const selectedType = row.querySelector(
-        'input[type="radio"]:checked'
-    );
-
-    if (!mainAddressDisplay || !otherAddressInput || !selectedType) {
-        return;
-    }
-
-    if (selectedType.value === "other") {
-        mainAddressDisplay.style.display = "none";
-        otherAddressInput.style.display = "block";
-    } else {
-        mainAddressDisplay.style.display = "block";
-        otherAddressInput.style.display = "none";
-    }
-});
-
-
-
-Object.keys(cityDistricts).forEach(function (city) {
-    const option = document.createElement("option");
-    option.value = city;
-    option.textContent = city;
-    citySelect.appendChild(option);
-});
-
-citySelect.addEventListener("change", function () {
-    districtSelect.innerHTML = '<option value="">請選擇鄉鎮市區</option>';
-
-    const districts = cityDistricts[this.value] || [];
-
-    districts.forEach(function (district) {
-        const option = document.createElement("option");
-        option.value = district;
-        option.textContent = district;
-        districtSelect.appendChild(option);
-    });
-
-    districtSelect.disabled = districts.length === 0;
-});
-
-// 地基主所有地址組都使用與主要住址相同的縣市／鄉鎮市區資料。
-function populateGroundCities(select) {
-    select.innerHTML = '<option value="">請選擇縣市</option>';
-    Object.keys(cityDistricts).forEach(function (city) {
-        const option = document.createElement("option");
-        option.value = city;
-        option.textContent = city;
-        select.appendChild(option);
-    });
-}
-
-function populateGroundDistricts(citySelectElement, districtSelectElement) {
-    districtSelectElement.innerHTML = '<option value="">請選擇鄉鎮市區</option>';
-    const districts = cityDistricts[citySelectElement.value] || [];
-    districts.forEach(function (district) {
-        const option = document.createElement("option");
-        option.value = district;
-        option.textContent = district;
-        districtSelectElement.appendChild(option);
-    });
-    districtSelectElement.disabled = districts.length === 0;
-}
-
-populateGroundCities(groundCitySelect);
-groundCitySelect.addEventListener("change", function () {
-    populateGroundDistricts(groundCitySelect, groundDistrictSelect);
-});
-
-document.querySelectorAll('.ancestor-address-entry').forEach(function (entry) {
-    const city = entry.querySelector('.ground-city');
-    const district = entry.querySelector('.ground-district');
-    populateGroundCities(city);
-    city.addEventListener('change', function () { populateGroundDistricts(city, district); });
-});
-
-
-        try {
-            records = JSON.parse(
-                localStorage.getItem("registrationRecords") || "[]"
-            );
-        } catch (error) {
-            records = [];
-        }
-
-        document.getElementById('disaster').addEventListener('change', syncDisasterAreaControls);
-        document.querySelectorAll('.minor-item input[name="minorItem"]').forEach(function (checkbox) {
-            checkbox.addEventListener('change', function () {
-                syncMinorItemControls(checkbox.closest('.minor-item'));
-                updateSalvationTotalCount();
-            });
-        });
-        syncAllOptionControls();
-        updateSalvationTotalCount();
-
-        
-addDisasterNameButton.addEventListener("click", function () {
-const number = document.createElement("span");
-number.className = "name-number";
-number.textContent = "";
-    const row = document.createElement("div");
-    row.className = "name-row";
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "disasterName";
-    input.className = "text-input";
-    input.placeholder = "請輸入姓名";
-
-    const addressOptions = document.createElement("div");
-    addressOptions.className = "disaster-address-options";
-
-    const radioName = "disasterAddressType_" + Date.now() + "_" + Math.random().toString(36).slice(2);
-
-    addressOptions.innerHTML = `
-        <label>
-            <input type="radio" name="${radioName}" value="main" checked>
-            同主要住址
-        </label>
-
-        <div class="main-address-display">
-            尚未填寫主要住址
-        </div>
-
-        <label>
-            <input type="radio" name="${radioName}" value="other">
-            其他住址
-        </label>
-
-        <input
-            class="text-input other-address-input"
-            type="text"
-            placeholder="請輸入其他住址"
-            style="display: none;"
-        >
-    `;
-
-    const removeButton = document.createElement("button");
-    removeButton.type = "button";
-    removeButton.className = "remove-button";
-    removeButton.textContent = "刪除";
-    removeButton.setAttribute("aria-label", "刪除此姓名欄位");
-
-removeButton.addEventListener("click", function () {
-    row.remove();
-    updateDisasterNameNumbers();
-    updateDisasterNameCount();
-});
-
-
-row.appendChild(number);
-row.appendChild(input);
-row.appendChild(addressOptions);
-row.appendChild(removeButton);
-
-disasterNames.appendChild(row);
-syncDisasterAreaControls();
-
-updateMainAddressDisplay();
-updateDisasterNameNumbers();
-updateDisasterNameCount();
-input.focus();
-
-});
-
-
-        function showRecords() {
-            recordList.replaceChildren();
-
-            records.forEach(function (record) {
-                const li = document.createElement("li");
-
-                li.textContent =
-                    "寫牌位者：" + (record.name || "") +
-                    "｜電話：" + (record.phone || "") +
-                    "｜地址：" + (record.address || "") +
-                    "｜登記項目：" + (record.item || "");
-
-                recordList.appendChild(li);
-            });
-        }
-
-        form.addEventListener("submit", async function (event) {
-            event.preventDefault();
-
-            const selectedMajorItems = Array.from(
-                document.querySelectorAll('input[name="majorItem"]:checked')
-            ).map(function (checkbox) {
-                return checkbox.value;
-            });
-
-            const selectedMinorItems = Array.from(
-                document.querySelectorAll('input[name="minorItem"]:checked')
-            ).map(function (checkbox) {
-                return checkbox.value;
-            });
-
-            if (selectedMajorItems.length === 0) {
-                message.textContent = "請至少勾選一個登記項目。";
-                return;
+            function refreshAddressMode() {
+                const useMain = useMainAddress.checked;
+                mainAddressPreview.hidden = !useMain;
+                customAddressArea.hidden = useMain;
+                entry.querySelector(".address-preview-text").textContent = getMainAddress() || "尚未填寫類別 2 的主要地址";
+                updateDisasterCount();
             }
 
-            const names = Array.from(
-                document.querySelectorAll('input[name="disasterName"]')
-            ).map(function (input) {
-                return input.value.trim();
-            }).filter(Boolean);
-
-            if (selectedMajorItems.includes("消災") && names.length === 0) {
-                message.textContent = "已勾選消災，請至少填寫一位消災姓名。";
-                return;
-            }
-
-            const itemDetails = [];
-
-            if (selectedMajorItems.includes("消災")) {
-                itemDetails.push("消災（姓名：" + names.join("、") + "）");
-            }
-
-            if (selectedMajorItems.includes("超薦")) {
-                itemDetails.push(
-                    "超薦" +
-                    (selectedMinorItems.length
-                        ? "（" + selectedMinorItems.join("、") + "）"
-                        : "")
-                );
-            }
-
-            // 逐筆建立消災、超薦及普桌明細；每筆明細由 Apps Script 配發全類別共用的連續 MD 流水號。
-            const mainAddress = [
-                document.getElementById("city").value,
-                document.getElementById("district").value,
-                document.getElementById("detailAddress").value.trim()
-            ].filter(Boolean).join("");
-
-            const disasterEntries = selectedMajorItems.includes("消災")
-                ? Array.from(document.querySelectorAll("#disasterNames .name-row")).map(function (row) {
-                    const nameInput = row.querySelector('input[name="disasterName"]');
-                    if (!nameInput || !nameInput.value.trim()) return null;
-                    const selectedAddressType = row.querySelector('input[type="radio"]:checked');
-                    const otherAddressInput = row.querySelector(".other-address-input");
-                    const address = selectedAddressType && selectedAddressType.value === "other"
-                        ? (otherAddressInput ? otherAddressInput.value.trim() : "")
-                        : mainAddress;
-                    return { name: nameInput.value.trim(), address: address || mainAddress };
-                }).filter(Boolean)
-                : [];
-
-            const details = [];
-            const isMinorSelected = function (prefix) {
-                return selectedMinorItems.some(function (value) { return value.indexOf(prefix) === 0; });
-            };
-            const addSimpleMinorDetails = function (itemId, category, role) {
-                if (!isMinorSelected(itemId)) return;
-                document.querySelectorAll('.minor-names[data-item="' + itemId + '"] .minor-name-input').forEach(function (input) {
-                    const value = input.value.trim();
-                    if (value) details.push({ category: category, name: value, role: role, address: "" });
-                });
-            };
-            const readAddress = function (entry, sameMainSelector) {
-                const sameMain = entry.querySelector(".same-main-address-checkbox");
-                if (sameMain && sameMain.checked) return mainAddress;
-                const city = entry.querySelector(".ground-city");
-                const district = entry.querySelector(".ground-district");
-                const detail = entry.querySelector(".ground-detail-address");
-                return [city ? city.value : "", district ? district.value : "", detail ? detail.value.trim() : ""].filter(Boolean).join("");
-            };
-
-            if (selectedMajorItems.includes("消災")) {
-                disasterEntries.forEach(function (entry) {
-                    details.push({ category: "消災", name: entry.name, role: "消災姓名", address: entry.address || mainAddress });
-                });
-            }
-            if (selectedMajorItems.includes("超薦")) {
-                addSimpleMinorDetails("2-1", "2-1 個人累世冤親債主", "敬薦人");
-                addSimpleMinorDetails("2-2", "2-2 累世今生所食所傷眾生", "敬薦人");
-
-                if (isMinorSelected("2-3")) {
-                    document.querySelectorAll('.minor-address-list[data-item="2-3"] .ancestor-address-entry').forEach(function (entry) {
-                        const surname = (entry.querySelector(".ancestor-surname") || {}).value || "";
-                        const benefactor = (entry.querySelector(".ancestor-benefactor") || {}).value || "";
-                        const address = readAddress(entry);
-                        // 每一個姓名輸入框各自建立一列，祖先姓氏與陽上報恩人不共用同一列。
-                        if (surname.trim()) {
-                            details.push({ category: "2-3 歷代祖先", name: surname.trim(), role: "祖先姓氏", address: address });
-                        }
-                        if (benefactor.trim()) {
-                            details.push({ category: "2-3 歷代祖先", name: benefactor.trim(), role: "陽上報恩人", address: address });
-                        }
-                    });
+            function applyWriterData() {
+                if (sameAsWriter.checked) {
+                    disasterName.value = document.getElementById("writerName").value;
+                    useMainAddress.checked = true;
+                    useMainAddress.disabled = true;
+                } else {
+                    useMainAddress.disabled = false;
                 }
-                if (isMinorSelected("2-4")) {
-                    document.querySelectorAll('.minor-address-list[data-item="2-4"] .ground-address-entry').forEach(function (entry) {
-                        const recommender = (entry.querySelector(".ground-recommender") || {}).value || "";
-                        const address = readAddress(entry);
-                        if (recommender.trim()) details.push({ category: "2-4 地基主", name: recommender.trim(), role: "敬薦人", address: address });
-                        else if (address) details.push({ category: "2-4 地基主", name: "地基主", role: "地基主", address: address });
-                    });
-                }
-                if (isMinorSelected("2-5")) {
-                    document.querySelectorAll('.minor-names[data-item="2-5"] .minor-entry').forEach(function (entry) {
-                        const inputs = entry.querySelectorAll(".minor-name-input");
-                        const deceased = inputs[0] ? inputs[0].value.trim() : "";
-                        const benefactor = inputs[1] ? inputs[1].value.trim() : "";
-                        // 歿者姓名與陽上報恩人分開記錄，各自一列。
-                        if (deceased) details.push({ category: "2-5 已過世親人（歿）", name: deceased, role: "請輸入姓名（歿）", address: "" });
-                        if (benefactor) details.push({ category: "2-5 已過世親人（歿）", name: benefactor, role: "陽上報恩人", address: "" });
-                    });
-                }
-                addSimpleMinorDetails("2-6", "2-6 墮胎流產嬰靈夭折無緣子女", "敬薦人");
-                addSimpleMinorDetails("2-7", "2-7 其他（寵物）", "寵物名稱");
-                if (isMinorSelected("2-8")) {
-                    const tableCount = Math.max(0, Number(document.getElementById("publicTableCount").value || 0));
-                    for (let i = 1; i <= tableCount; i++) {
-                        details.push({ category: "2-8 普桌", name: "普桌", role: "普桌", address: "", tableNumber: i, quantity: 1 });
-                    }
-                }
+                refreshAddressMode();
             }
 
-            const record = {
-                name: document.getElementById("name").value.trim(),
-                tabletCategory: document.querySelector('input[name="tabletCategory"]:checked').value,
-                phone: document.getElementById("phone").value.trim(),
-                address: [
-    document.getElementById("city").value,
-    document.getElementById("district").value,
-    document.getElementById("detailAddress").value.trim()
-].filter(Boolean).join(""),
-                disasterNames: selectedMajorItems.includes("消災") ? names : [],
-                disasterEntries: disasterEntries,
-                details: details,
-                item: itemDetails.join("；")
-            };
+            sameAsWriter.addEventListener("change", applyWriterData);
+            useMainAddress.addEventListener("change", refreshAddressMode);
 
-            message.textContent = "正在送出登記，請稍候……";
-
-            try {
-                await fetch(scriptUrl, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: {
-                        "Content-Type": "text/plain;charset=utf-8"
-                    },
-                    body: JSON.stringify(record)
-                });
-
-                records.push(record);
-                localStorage.setItem(
-                    "registrationRecords",
-                    JSON.stringify(records)
-                );
-
-                showRecords();
-                message.textContent =
-                    "登記資料已送出。請再確認 Google 試算表是否收到資料。";
-
-                form.reset();
-                districtSelect.innerHTML = '<option value="">請先選擇縣市</option>';
-                districtSelect.disabled = true;
-                groundDistrictSelect.innerHTML = '<option value="">請先選擇縣市</option>';
-                groundDistrictSelect.disabled = true;
-
-                disasterNames.innerHTML = `
-<div class="name-row">
-    <span class="name-number">1.</span>
-    <input class="text-input" type="text" name="disasterName" placeholder="請輸入姓名">
-    <div class="disaster-address-options">
-        <label>
-            <input type="radio" name="disasterAddressType_0" value="main" checked>
-            同主要住址
-        </label>
-        <div class="main-address-display">尚未填寫主要住址</div>
-        <label>
-            <input type="radio" name="disasterAddressType_0" value="other">
-            其他住址
-        </label>
-        <input class="text-input other-address-input" type="text" placeholder="請輸入其他住址" style="display: none;">
-    </div>
-</div>
+            const householdNameList = entry.querySelector(".household-name-list");
+            entry.querySelector(".add-household-name").addEventListener("click", () => {
+                const row = document.createElement("div");
+                row.className = "household-name-row";
+                row.innerHTML = `
+                    <input type="text" class="same-household-names" placeholder="請輸入同戶姓名（選填）">
+                    <button type="button" class="remove-household-name">移除</button>
                 `;
-                salvationItems.style.display = "none";
-                updateMainAddressDisplay();
-                updateDisasterNameNumbers();
-                updateDisasterNameCount();
-                syncAllOptionControls();
+                row.querySelector(".remove-household-name").addEventListener("click", () => row.remove());
+                householdNameList.appendChild(row);
+                row.querySelector("input").focus();
+            });
+            entry.querySelectorAll(".disaster-city, .disaster-district, .disaster-detail-address").forEach(input => {
+                input.addEventListener("input", updateDisasterCount);
+                input.addEventListener("change", updateDisasterCount);
+            });
+            entry.querySelector(".remove-disaster").addEventListener("click", () => {
+                entry.remove();
+                renumberDisasterEntries();
+                updateDisasterCount();
+            });
 
-            } catch (error) {
-                message.textContent =
-                    "無法送出資料，請檢查網路連線後再試。";
-            }
-        });
-
-        showRecords();
-        document.getElementById("searchButton").addEventListener("click", function () {
-    const phone = document.getElementById("searchPhone").value.trim();
-    const resultsDiv = document.getElementById("searchResults");
-
-    if (!phone) {
-        resultsDiv.textContent = "請先輸入聯絡電話。";
-        return;
-    }
-
-    resultsDiv.textContent = "查詢中，請稍候……";
-
-    const callbackName = "searchCallback_" + Date.now();
-
-    window[callbackName] = function (data) {
-        resultsDiv.innerHTML = "";
-        delete window[callbackName];
-
-        if (!data.success || data.results.length === 0) {
-            resultsDiv.textContent = "查無資料，請確認聯絡電話是否正確。";
-            return;
+            disasterList.appendChild(entry);
+            renumberDisasterEntries();
+            refreshAddressMode();
+            updateDisasterCount();
         }
 
-        data.results.forEach(function (item) {
-            const record = document.createElement("div");
-            record.style.border = "1px solid #ccc";
-            record.style.padding = "12px";
-            record.style.marginTop = "10px";
+        // 將類別 2 的主要地址組合成一段文字；空白欄位不會被強制要求填寫。
+        function getMainAddress() {
+            return [
+                document.getElementById("mainCity").value,
+                document.getElementById("mainDistrict").value,
+                document.getElementById("mainAddress").value
+            ].filter(value => value && value.trim()).join("");
+        }
 
-            const values = item.values;
-            const info = document.createElement("p");
-            info.textContent =
-                "姓名：" + values[1] +
-                "｜電話：" + values[2] +
-                "｜流水號：" + values[4] +
-                "｜牌位類別：" + values[7];
+        // 組合自行填寫的消災地址，格式與類別 2 相同。
+        function getCustomDisasterAddress(entry) {
+            return [
+                entry.querySelector(".disaster-city").value,
+                entry.querySelector(".disaster-district").value,
+                entry.querySelector(".disaster-detail-address").value
+            ].filter(value => value && value.trim()).join("");
+        }
 
-            record.appendChild(info);
+        // 重新編號，避免刪除資料後編號跳號。
+        function renumberDisasterEntries() {
+            [...disasterList.querySelectorAll(".disaster-entry h3")].forEach((heading, index) => {
+                heading.textContent = `消災代表 ${index + 1}`;
+            });
+        }
 
-const editButton = document.createElement("button");
-editButton.type = "button";
-editButton.textContent = "修改";
-editButton.addEventListener("click", function () {
-    document.getElementById("editRowNumber").value = item.rowNumber;
-    document.getElementById("editName").value = values[1];
-    document.getElementById("editPhone").value = values[2];
-    document.getElementById("editItem").value = values[3];
-    document.getElementById("editSerial").value = values[4];
-    document.getElementById("editDisasterName").value = values[5];
-    document.getElementById("editAddress").value = values[6];
-    document.getElementById("editTabletCategory").value = values[7];
 
-    document.getElementById("editForm").style.display = "block";
-    document.getElementById("editForm").scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
-});
-
-record.appendChild(editButton);
-resultsDiv.appendChild(record);
+        // 類別 2 的主要地址變更時，同步更新已勾選「使用主要地址」的消災代表。
+        ["mainCity", "mainDistrict", "mainAddress"].forEach(id => {
+            const field = document.getElementById(id);
+            field.addEventListener("input", refreshMainAddressPreviews);
+            field.addEventListener("change", refreshMainAddressPreviews);
         });
-    };
 
-    const script = document.createElement("script");
-    script.src =
-        "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec" +
-        "?action=search&phone=" + encodeURIComponent(phone) +
-        "&callback=" + callbackName;
+        // 牌位填寫人姓名變更時，同步更新已勾選「同牌位填寫人」的消災代表。
+        document.getElementById("writerName").addEventListener("input", refreshWriterData);
+        document.getElementById("writerName").addEventListener("change", refreshWriterData);
 
-    script.onerror = function () {
-        resultsDiv.textContent = "查詢失敗，請稍後再試。";
-        delete window[callbackName];
-        script.remove();
-    };
+        function refreshWriterData() {
+            disasterList.querySelectorAll(".disaster-entry").forEach(entry => {
+                if (entry.querySelector(".same-as-writer").checked) {
+                    entry.querySelector(".disaster-name").value = document.getElementById("writerName").value;
+                }
+            });
+        }
 
-    document.body.appendChild(script);
-});
-document.getElementById("saveEditButton").addEventListener("click", async function () {
-    const rowNumber = Number(document.getElementById("editRowNumber").value);
-    const phone = document.getElementById("editPhone").value.trim();
+        function refreshMainAddressPreviews() {
+            disasterList.querySelectorAll(".disaster-entry").forEach(entry => {
+                if (entry.querySelector(".use-main-address").checked) {
+                    entry.querySelector(".address-preview-text").textContent = getMainAddress() || "尚未填寫類別 2 的主要地址";
+                }
+            });
+            updateDisasterCount();
+        }
 
-    if (!rowNumber || !phone) {
-        alert("請確認資料列與聯絡電話已填寫。");
-        return;
-    }
+        // 統計不同住址；忽略空白地址，並排除前後空格及空格格式差異。
+        function normalizeAddress(address) {
+            return address
+                .normalize("NFKC")
+                .replace(/[\s　]+/g, "")
+                .trim();
+        }
 
-    const data = {
-        action: "update",
-        adminPassword: document.getElementById("editAdminPassword").value,
-        rowNumber: rowNumber,
-        name: document.getElementById("editName").value.trim(),
-        phone: phone,
-        item: document.getElementById("editItem").value.trim(),
-        disasterName: document.getElementById("editDisasterName").value.trim(),
-        address: document.getElementById("editAddress").value.trim(),
-        tabletCategory: document.getElementById("editTabletCategory").value
-    };
-
-    if (!confirm("確定要儲存這筆資料的修改嗎？")) {
-        return;
-    }
-
-    const button = document.getElementById("saveEditButton");
-    button.disabled = true;
-
-    try {
-        await fetch(
-            "https://script.google.com/macros/s/AKfycbz4g-ZR30EtkX3YF45AE9v8tPjmR342sexiPP5JsJbDL57gN3NYxc2j4rUHSzM8z65k/exec",
-            {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify(data)
+        function updateDisasterCount() {
+            if (!enableDisaster.checked) {
+                disasterCount.textContent = "0";
+                return;
             }
-        );
 
-        alert("修改資料已送出，請到 Google 試算表確認是否更新成功。");
-        document.getElementById("editForm").style.display = "none";
-    } catch (error) {
-        alert("送出失敗，請檢查網路連線後再試。");
-    } finally {
-        button.disabled = false;
-    }
-});
+            const uniqueAddresses = new Set();
 
-document.getElementById("cancelEditButton").addEventListener("click", function () {
-    document.getElementById("editForm").style.display = "none";
-});
+            disasterList.querySelectorAll(".disaster-entry").forEach(entry => {
+                const useMainAddress = entry.querySelector(".use-main-address").checked;
+                const rawAddress = useMainAddress ? getMainAddress() : getCustomDisasterAddress(entry);
+                const address = normalizeAddress(rawAddress);
+                if (address) uniqueAddresses.add(address);
+            });
+
+            disasterCount.textContent = uniqueAddresses.size;
+        }
+
+        // 縣市／鄉鎮市區選單資料
+        const districtOptions = {
+            "臺北市": "中正區,大同區,中山區,松山區,大安區,萬華區,信義區,士林區,北投區,內湖區,南港區,文山區",
+            "新北市": "板橋區,三重區,中和區,永和區,新莊區,新店區,土城區,蘆洲區,汐止區,樹林區,淡水區,鶯歌區,三峽區,林口區,五股區,泰山區,八里區,深坑區,石碇區,坪林區,三芝區,石門區,金山區,萬里區,瑞芳區,貢寮區,雙溪區,平溪區,烏來區",
+            "基隆市": "仁愛區,信義區,中正區,中山區,安樂區,暖暖區,七堵區",
+            "桃園市": "桃園區,中壢區,大溪區,楊梅區,蘆竹區,大園區,龜山區,八德區,龍潭區,平鎮區,新屋區,觀音區,復興區",
+            "新竹市": "東區,北區,香山區",
+            "新竹縣": "竹北市,竹東鎮,新埔鎮,關西鎮,湖口鄉,新豐鄉,芎林鄉,寶山鄉,北埔鄉,峨眉鄉,尖石鄉,五峰鄉,橫山鄉",
+            "苗栗縣": "苗栗市,頭份市,竹南鎮,後龍鎮,通霄鎮,苑裡鎮,卓蘭鎮,造橋鄉,西湖鄉,頭屋鄉,公館鄉,銅鑼鄉,三義鄉,大湖鄉,獅潭鄉,三灣鄉,南庄鄉,泰安鄉",
+            "臺中市": "中區,東區,南區,西區,北區,北屯區,西屯區,南屯區,太平區,大里區,霧峰區,烏日區,豐原區,后里區,石岡區,東勢區,新社區,潭子區,大雅區,神岡區,大肚區,沙鹿區,龍井區,梧棲區,清水區,大甲區,外埔區,大安區,和平區",
+            "彰化縣": "彰化市,員林市,鹿港鎮,和美鎮,溪湖鎮,田中鎮,北斗鎮,二林鎮,花壇鄉,芬園鄉,大村鄉,永靖鄉,伸港鄉,線西鄉,福興鄉,秀水鄉,埔心鄉,埔鹽鄉,大城鄉,芳苑鄉,竹塘鄉,埤頭鄉,溪州鄉,田尾鄉,社頭鄉,二水鄉",
+            "南投縣": "南投市,埔里鎮,草屯鎮,竹山鎮,集集鎮,名間鄉,鹿谷鄉,中寮鄉,魚池鄉,國姓鄉,水里鄉,信義鄉,仁愛鄉",
+            "雲林縣": "斗六市,斗南鎮,虎尾鎮,西螺鎮,土庫鎮,北港鎮,古坑鄉,大埤鄉,莿桐鄉,林內鄉,二崙鄉,崙背鄉,麥寮鄉,東勢鄉,褒忠鄉,臺西鄉,元長鄉,四湖鄉,口湖鄉,水林鄉",
+            "嘉義市": "東區,西區",
+            "嘉義縣": "太保市,朴子市,布袋鎮,大林鎮,民雄鄉,溪口鄉,新港鄉,六腳鄉,東石鄉,義竹鄉,鹿草鄉,水上鄉,中埔鄉,竹崎鄉,梅山鄉,番路鄉,大埔鄉,阿里山鄉",
+            "臺南市": "中西區,東區,南區,北區,安平區,安南區,永康區,歸仁區,新化區,左鎮區,玉井區,楠西區,南化區,仁德區,關廟區,龍崎區,官田區,麻豆區,佳里區,西港區,七股區,將軍區,學甲區,北門區,新營區,後壁區,白河區,東山區,六甲區,下營區,柳營區,鹽水區,善化區,大內區,山上區,新市區,安定區",
+            "高雄市": "新興區,前金區,苓雅區,鹽埕區,鼓山區,旗津區,前鎮區,三民區,左營區,楠梓區,小港區,鳳山區,大寮區,鳥松區,林園區,仁武區,大樹區,大社區,岡山區,路竹區,橋頭區,梓官區,彌陀區,永安區,燕巢區,田寮區,阿蓮區,茄萣區,湖內區,旗山區,美濃區,內門區,杉林區,甲仙區,六龜區,桃源區,那瑪夏區,茂林區",
+            "屏東縣": "屏東市,潮州鎮,東港鎮,恆春鎮,萬丹鄉,長治鄉,麟洛鄉,九如鄉,里港鄉,鹽埔鄉,高樹鄉,萬巒鄉,內埔鄉,竹田鄉,新埤鄉,枋寮鄉,新園鄉,崁頂鄉,林邊鄉,南州鄉,佳冬鄉,琉球鄉,車城鄉,滿州鄉,枋山鄉,三地門鄉,霧臺鄉,瑪家鄉,泰武鄉,來義鄉,春日鄉,獅子鄉,牡丹鄉",
+            "宜蘭縣": "宜蘭市,羅東鎮,蘇澳鎮,頭城鎮,礁溪鄉,壯圍鄉,員山鄉,冬山鄉,五結鄉,三星鄉,大同鄉,南澳鄉",
+            "花蓮縣": "花蓮市,鳳林鎮,玉里鎮,新城鄉,吉安鄉,壽豐鄉,光復鄉,豐濱鄉,瑞穗鄉,富里鄉,秀林鄉,萬榮鄉,卓溪鄉",
+            "臺東縣": "臺東市,成功鎮,關山鎮,卑南鄉,鹿野鄉,池上鄉,東河鄉,長濱鄉,太麻里鄉,大武鄉,綠島鄉,海端鄉,延平鄉,金峰鄉,達仁鄉,蘭嶼鄉",
+            "澎湖縣": "馬公市,湖西鄉,白沙鄉,西嶼鄉,望安鄉,七美鄉",
+            "金門縣": "金城鎮,金湖鎮,金沙鎮,金寧鄉,烈嶼鄉,烏坵鄉",
+            "連江縣": "南竿鄉,北竿鄉,莒光鄉,東引鄉"
+        };
+        const cityNames = Object.keys(districtOptions);
+
+        function populateCity(select) {
+            const oldValue = select.value;
+            select.innerHTML = '<option value="">請選擇縣市</option>' + cityNames.map(city => `<option value="${city}">${city}</option>`).join('');
+            if (cityNames.includes(oldValue)) select.value = oldValue;
+        }
+        function populateDistrict(citySelect, districtSelect) {
+            const oldValue = districtSelect.value;
+            const districts = (districtOptions[citySelect.value] || '').split(',').filter(Boolean);
+            districtSelect.innerHTML = '<option value="">請選擇鄉鎮市區</option>' + districts.map(d => `<option value="${d}">${d}</option>`).join('');
+            if (districts.includes(oldValue)) districtSelect.value = oldValue;
+        }
+        function setupAddressDropdowns(root = document) {
+            const pairs = [];
+            if (root === document) pairs.push([document.getElementById('mainCity'), document.getElementById('mainDistrict')]);
+            root.querySelectorAll('.disaster-city').forEach(city => pairs.push([city, city.closest('.custom-disaster-address').querySelector('.disaster-district')]));
+            pairs.forEach(([city, district]) => {
+                if (!city || !district || city.dataset.ready === '1') return;
+                city.dataset.ready = '1';
+                populateCity(city);
+                populateDistrict(city, district);
+                city.addEventListener('change', () => { populateDistrict(city, district); updateDisasterCount(); });
+                district.addEventListener('change', updateDisasterCount);
+            });
+        }
+        setupAddressDropdowns();
+        const addressObserver = new MutationObserver(() => setupAddressDropdowns(disasterList));
+        addressObserver.observe(disasterList, {childList: true});
+
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzlXWZ32YgkcOGkkHdEoJ03f3dl0Br8ezB2vB613_MbNLLzuDctMRaJhMzctQwf6cPo/exec';
+        const submitButton = document.getElementById('submitRegistration');
+        const submitStatus = document.getElementById('submitStatus');
+        const transportForm = document.getElementById('registrationTransportForm');
+        const transportPayload = document.getElementById('registrationPayload');
+        let submitInProgress = false;
+        let submitTimeout;
+
+        function collectRegistrationPayload() {
+            const tablet = document.querySelector('input[name="tabletType"]:checked');
+            const writerName = document.getElementById('writerName').value.trim();
+            const writerPhone = document.getElementById('writerPhone').value.trim();
+            const mainCity = document.getElementById('mainCity').value;
+            const mainDistrict = document.getElementById('mainDistrict').value;
+            const mainAddress = document.getElementById('mainAddress').value.trim();
+            const disasterEntries = [];
+            if (!tablet) throw new Error('請先選擇牌位種類。');
+            if (!writerName) throw new Error('請填寫牌位填寫人姓名。');
+            if (!writerPhone) throw new Error('請填寫聯絡電話。');
+            if (enableDisaster.checked) {
+                const entries = [...disasterList.querySelectorAll('.disaster-entry')];
+                if (!entries.length) throw new Error('請至少新增一筆消災代表。');
+                entries.forEach((entry, index) => {
+                    const name = entry.querySelector('.disaster-name').value.trim();
+                    if (!name) throw new Error(`請填寫「消災代表 ${index + 1}」姓名。`);
+                    const useMainAddress = entry.querySelector('.use-main-address').checked;
+                    const city = useMainAddress ? mainCity : entry.querySelector('.disaster-city').value;
+                    const district = useMainAddress ? mainDistrict : entry.querySelector('.disaster-district').value;
+                    const detailAddress = useMainAddress ? mainAddress : entry.querySelector('.disaster-detail-address').value.trim();
+                    const address = [city, district, detailAddress].filter(Boolean).join('');
+                    if (!address) throw new Error(`請為「消災代表 ${index + 1}」選擇同主要地址，或填寫住址。`);
+                    const householdNames = [...entry.querySelectorAll('.same-household-names')].map(input => input.value.trim()).filter(Boolean);
+                    disasterEntries.push({name, householdNames, city, district, detailAddress, address, useMainAddress});
+                });
+            }
+            return {writerName, writerPhone, tabletType: tablet.value, mainCity, mainDistrict, mainAddress, registrationItems: enableDisaster.checked ? ['消災'] : [], disasterEntries};
+        }
+
+        submitButton.addEventListener('click', () => {
+            if (submitInProgress) return;
+            let payload;
+            try { payload = collectRegistrationPayload(); }
+            catch (error) { submitStatus.textContent = error.message; submitStatus.style.color = '#b00020'; return; }
+            submitInProgress = true;
+            submitButton.disabled = true;
+            submitButton.textContent = '正在送出…';
+            submitStatus.textContent = '正在送出登記資料，請稍候。';
+            submitStatus.style.color = '#555';
+            transportPayload.value = JSON.stringify(payload);
+            transportForm.action = WEB_APP_URL;
+            transportForm.submit();
+            clearTimeout(submitTimeout);
+            submitTimeout = setTimeout(() => {
+                if (!submitInProgress) return;
+                submitStatus.textContent = '尚未收到回覆。請先查看試算表是否已新增資料，確認前請勿重複送出。';
+                submitStatus.style.color = '#b00020';
+                submitButton.disabled = false;
+                submitButton.textContent = '重新送出';
+                submitInProgress = false;
+            }, 20000);
+        });
+
+        window.addEventListener('message', event => {
+            const data = event.data;
+            if (!data || data.type !== 'SANDE_REGISTRATION_RESULT') return;
+            clearTimeout(submitTimeout);
+            submitInProgress = false;
+            submitButton.disabled = false;
+            submitButton.textContent = '送出登記';
+            if (data.success) {
+                const serials = Array.isArray(data.serials) ? [...new Set(data.serials.filter(Boolean))] : [];
+                submitStatus.textContent = serials.length ? `登記成功！住址流水號：${serials.join('、')}` : '登記成功！';
+                submitStatus.style.color = '#176b37';
+            } else {
+                submitStatus.textContent = '登記失敗：' + (data.message || '請檢查資料後再試。');
+                submitStatus.style.color = '#b00020';
+            }
+        });
     </script>
 </body>
 </html>
