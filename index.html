@@ -1922,7 +1922,7 @@ input.focus();
                 if (!isMinorSelected(itemId)) return;
                 document.querySelectorAll('.minor-names[data-item="' + itemId + '"] .minor-name-input').forEach(function (input) {
                     const value = input.value.trim();
-                    if (value) details.push({ category: category, name: value, role: role, address: "" });
+                    if (value) details.push({ category: category, name: value, role: role, benefactor: "", address: "" });
                 });
             };
             const readAddress = function (entry, sameMainSelector) {
@@ -1949,7 +1949,7 @@ input.focus();
                         const benefactor = (entry.querySelector(".ancestor-benefactor") || {}).value || "";
                         const address = readAddress(entry);
                         if (surname.trim() || benefactor.trim() || address) {
-                            details.push({ category: "2-3 歷代祖先", name: surname.trim(), role: "陽上報恩人", benefactor: benefactor.trim(), address: address, note: surname.trim() ? "祖先姓氏：" + surname.trim() : "" });
+                            details.push({ category: "2-3 歷代祖先", name: surname.trim(), role: "祖先姓氏", benefactor: benefactor.trim(), address: address, note: benefactor.trim() ? "陽上報恩人：" + benefactor.trim() : "" });
                         }
                     });
                 }
@@ -1965,15 +1965,15 @@ input.focus();
                         const inputs = entry.querySelectorAll(".minor-name-input");
                         const deceased = inputs[0] ? inputs[0].value.trim() : "";
                         const benefactor = inputs[1] ? inputs[1].value.trim() : "";
-                        if (deceased || benefactor) details.push({ category: "2-5 已過世親人（歿）", name: deceased, role: "陽上報恩人", benefactor: benefactor, address: "" });
+                        if (deceased || benefactor) details.push({ category: "2-5 已過世親人（歿）", name: deceased, role: "請輸入姓名（歿）", benefactor: benefactor, address: "", note: benefactor ? "陽上報恩人：" + benefactor : "" });
                     });
                 }
                 addSimpleMinorDetails("2-6", "2-6 墮胎流產嬰靈夭折無緣子女", "敬薦人");
-                addSimpleMinorDetails("2-7", "2-7 其他（寵物）", "寵物姓名");
+                addSimpleMinorDetails("2-7", "2-7 其他（寵物）", "寵物名稱");
                 if (isMinorSelected("2-8")) {
                     const tableCount = Math.max(0, Number(document.getElementById("publicTableCount").value || 0));
                     for (let i = 1; i <= tableCount; i++) {
-                        details.push({ category: "2-8 普桌", name: "普桌", role: "普桌", address: "", tableNumber: i, quantity: 1 });
+                        details.push({ category: "2-8 普桌", name: "普桌", role: "普桌", benefactor: "", address: "", tableNumber: i, quantity: 1, note: "第" + i + "桌" });
                     }
                 }
             }
@@ -1981,7 +1981,7 @@ input.focus();
             const record = {
                 name: document.getElementById("name").value.trim(),
                 tabletCategory: document.querySelector('input[name="tabletCategory"]:checked').value,
-                phone: document.getElementById("phone").value.trim(),
+                phone: String(document.getElementById("phone").value).trim().replace(/[\s-]/g, ""),
                 address: [
     document.getElementById("city").value,
     document.getElementById("district").value,
@@ -2053,7 +2053,7 @@ input.focus();
 
         showRecords();
         document.getElementById("searchButton").addEventListener("click", function () {
-    const phone = document.getElementById("searchPhone").value.trim();
+    const phone = String(document.getElementById("searchPhone").value).trim().replace(/[\s-]/g, "");
     const resultsDiv = document.getElementById("searchResults");
 
     if (!phone) {
@@ -2131,7 +2131,7 @@ resultsDiv.appendChild(record);
 });
 document.getElementById("saveEditButton").addEventListener("click", async function () {
     const rowNumber = Number(document.getElementById("editRowNumber").value);
-    const phone = document.getElementById("editPhone").value.trim();
+    const phone = String(document.getElementById("editPhone").value).trim().replace(/[\s-]/g, "");
 
     if (!rowNumber || !phone) {
         alert("請確認資料列與聯絡電話已填寫。");
