@@ -1895,7 +1895,7 @@ input.focus();
                 );
             }
 
-            // 組合每一筆超薦／消災明細，實際流水號由 Apps Script 產生，避免重複。
+            // 逐筆建立消災、超薦及普桌明細；每筆明細由 Apps Script 配發全類別共用的連續 MD 流水號。
             const mainAddress = [
                 document.getElementById("city").value,
                 document.getElementById("district").value,
