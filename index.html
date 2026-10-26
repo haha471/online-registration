@@ -315,7 +315,54 @@
                 gap: 10px;
             }
         }
-    </style>
+    
+#superForm{font-family:system-ui,-apple-system,"Microsoft JhengHei",sans-serif;color:#263238;background:#fff;border-radius:14px;padding:clamp(14px,3vw,24px);margin-top:24px}
+#superForm *{box-sizing:border-box}
+#superForm main{max-width:850px;margin:auto;background:white;border-radius:18px;padding:clamp(16px,4vw,30px);box-shadow:0 6px 28px #16233b12}
+#superForm header{text-align:center;margin-bottom:26px}
+#superForm h1{font-size:clamp(24px,4vw,32px);margin:4px 0}
+#superForm h2{font-size:20px;margin:8px 0 14px}
+#superForm h3{font-size:17px;margin:0}
+#superForm .muted{color:#65717d;font-size:13px}
+#superForm .section{border-top:1px solid #e3e7eb;padding-top:22px;margin-top:22px}
+#superForm label{display:block;font-size:14px;font-weight:650;margin:7px 0 5px}
+#superForm input,
+#superForm select{font:inherit;width:100%;min-width:0;padding:10px 11px;border:1px solid #cbd2d9;border-radius:8px;background:white}
+#superForm input:focus,
+#superForm select:focus{outline:2px solid #8bb8e8;border-color:#5088c8}
+#superForm .field{margin-bottom:12px}
+#superForm .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#superForm .address{border:1px solid #d7dde3;border-radius:10px;padding:12px;margin-top:12px;background:#fff}
+#superForm .category{border-radius:12px;padding:14px;margin:14px 0}
+#superForm .cathead{display:flex;gap:10px;align-items:center;font-weight:700}
+#superForm .cathead input{width:18px;height:18px;flex:none}
+#superForm .catcontent{margin-top:12px}
+#superForm .entry{background:#ffffffc9;border:1px solid #d7dce2;border-radius:10px;padding:12px;margin:10px 0}
+#superForm button{font:inherit;cursor:pointer;border-radius:8px;padding:9px 12px;border:1px solid #aeb8c2;background:#fff;color:#263238}
+#superForm button:hover{filter:brightness(.97)}
+#superForm .add{width:100%;margin-top:4px;border-style:dashed}
+#superForm .remove{font-size:13px;padding:5px 9px;color:#9c3333;border-color:#d5aaaa}
+#superForm .entrytop{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+#superForm .radios{display:grid;gap:8px;margin:10px 0}
+#superForm .radios label{font-weight:400;display:flex;align-items:center;gap:8px;margin:0}
+#superForm .radios input{width:16px;height:16px;flex:none}
+#superForm .mainaddress{background:#f5f7fa;padding:10px;border-radius:8px;font-size:14px}
+#superForm .stats{background:#E3F0FC;border:1px solid #4B83B8;color:#245A88;border-radius:12px;padding:18px;margin:20px 0}
+#superForm .statrow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#superForm .count{font-size:30px;font-weight:800}
+#superForm .pet{background:#E1F3F8!important}
+#superForm .desk{background:#FFF8CC;border:1px solid #C4A52D;padding:14px;border-radius:12px;margin-top:14px}
+#superForm .note{font-size:12px;color:#65717d;line-height:1.6;margin-top:16px}
+#superForm main{padding:15px;border-radius:12px}
+#superForm .grid2{grid-template-columns:1fr}
+#superForm .statrow{align-items:flex-start;flex-direction:column}
+#superForm .count{font-size:26px}
+@media(max-width:520px){#superForm body{padding:10px 7px 30px}#superForm main{padding:15px;border-radius:12px}#superForm .grid2{grid-template-columns:1fr}#superForm .statrow{align-items:flex-start;flex-direction:column}#superForm .count{font-size:26px}}
+        .tablet-amount-group { margin-top: 12px; }
+        .tablet-amount-group input { width: 100%; box-sizing: border-box; padding: 9px 10px; border: 1px solid #c9c9c9; border-radius: 7px; font-size: 16px; }
+        .total-amount-value { font-size: 30px; font-weight: 800; color: #8b1e1e; margin: 8px 0; }
+        .total-amount-section { border: 2px solid #d9b7a1; background: #fffaf6; }
+</style>
 </head>
 
 <body>
@@ -336,6 +383,10 @@
                         <input type="radio" name="tabletType" value="大牌位">
                         大牌位
                     </label>
+                    <div class="form-group tablet-amount-group">
+                        <label for="amount_大牌位">牌位金額（每支）</label>
+                        <input type="number" id="amount_大牌位" class="tablet-amount" data-tablet-type="大牌位" min="0" step="1" inputmode="numeric" placeholder="請輸入金額">
+                    </div>
                 </div>
 
                 <div class="option-card">
@@ -343,6 +394,10 @@
                         <input type="radio" name="tabletType" value="中牌位">
                         中牌位
                     </label>
+                    <div class="form-group tablet-amount-group">
+                        <label for="amount_中牌位">牌位金額（每支）</label>
+                        <input type="number" id="amount_中牌位" class="tablet-amount" data-tablet-type="中牌位" min="0" step="1" inputmode="numeric" placeholder="請輸入金額">
+                    </div>
                 </div>
 
                 <div class="option-card">
@@ -350,6 +405,10 @@
                         <input type="radio" name="tabletType" value="小牌位">
                         小牌位
                     </label>
+                    <div class="form-group tablet-amount-group">
+                        <label for="amount_小牌位">牌位金額（每支）</label>
+                        <input type="number" id="amount_小牌位" class="tablet-amount" data-tablet-type="小牌位" min="0" step="1" inputmode="numeric" placeholder="請輸入金額">
+                    </div>
                 </div>
 
                 <div class="option-card">
@@ -360,14 +419,18 @@
                     <div class="option-description">
                         消災與超薦合計 30 支
                     </div>
+                    <div class="form-group tablet-amount-group">
+                        <label for="amount_全家牌位">牌位金額（每組）</label>
+                        <input type="number" id="amount_全家牌位" class="tablet-amount" data-tablet-type="全家牌位" min="0" step="1" inputmode="numeric" placeholder="請輸入金額">
+                    </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- 類別 2：牌位填寫人資料 -->
+        <!-- 類別 2：消災與超薦共用登記人資料 -->
         <section class="section">
-            <h2 class="section-title">類別 2：牌位填寫人資料</h2>
+            <h2 class="section-title">類別 2：消災與超薦共用登記人資料</h2>
 
             <div class="contact-row">
 
@@ -472,6 +535,34 @@
                     以不同住址為統計單位，同一戶只計算一張。
                 </p>
             </div>
+        </section>
+
+<div id="superForm"><main>
+<header><h1>三德精舍</h1><h2>超薦牌位登記表</h2><div class="muted">請填寫登記人資料，並勾選需要登記的項目。</div></header>
+<p class="muted">超薦項目將與上方「牌位填寫人資料」共用同一份登記人姓名、電話及主要住址，無須重複填寫。</p>
+
+<section class="section">
+<h2>二、超薦登記項目（可複選）</h2>
+<p class="muted">勾選項目後，可新增多筆姓名資料；每筆資料均可獨立選擇住址。</p>
+<div id="sup_categories"></div>
+<div class="stats">
+<div class="statrow"><div><h3>超薦牌位數量統計</h3><div class="muted" style="color:#245A88;margin-top:5px">僅統計前七類指定欄位中已填寫的姓名；普桌不列入統計。</div></div><div class="count" id="sup_count">0 筆</div></div>
+<div class="muted" style="color:#245A88;margin-top:10px;line-height:1.7">統計欄位：前兩類敬薦人、歷代祖先的陽上報恩人姓名、地祇主敬薦人、已過世親人的陽上報恩人姓名、墮胎流產嬰靈及夭折無緣子女的敬薦人、其他（寵物）的敬薦人姓名。</div>
+</div>
+<div id="sup_deskSection" class="desk">
+<div class="cathead"><input type="checkbox" id="sup_deskToggle"><label for="sup_deskToggle" style="margin:0;color:#887315">8. 普桌</label><label for="sup_deskAmount" style="margin:0 0 0 12px;color:#887315">普桌金額</label><input type="number" id="sup_deskAmount" min="0" step="1" value="0" aria-label="普桌金額" style="width:120px;max-width:35%;padding:8px;border:1px solid #d5bd60;border-radius:8px"></div>
+<div id="sup_deskContent" hidden></div>
+</div>
+</section>
+<p class="note">本頁為可下載的前端表單設計示範。資料只在目前瀏覽器頁面中操作，尚未連接 Google Sheets，也不會自動上傳或保存到雲端。行政區下拉選單目前提供常用區域示例，正式使用前需補齊完整行政區資料及後端送出功能。</p>
+</main></div>
+
+        <!-- 牌位金額總計 -->
+        <section class="section total-amount-section">
+            <h2 class="section-title">牌位金額總計</h2>
+            <p class="hint">計算方式：所選牌位種類的金額 ×（消災牌位總數＋超薦牌位數量統計）。依消災牌位總數加上超薦牌位數量統計計算。</p>
+            <div class="total-amount-value" id="totalTabletAmount">NT$ 0</div>
+            <p class="hint" id="totalTabletAmountDetail">請先選擇牌位種類並輸入金額。</p>
         </section>
 
         <!-- 類別 5：送出登記 -->
@@ -702,6 +793,7 @@
         function updateDisasterCount() {
             if (!enableDisaster.checked) {
                 disasterCount.textContent = "0";
+                if (typeof window.updateTotalTabletAmount === "function") window.updateTotalTabletAmount();
                 return;
             }
 
@@ -715,7 +807,28 @@
             });
 
             disasterCount.textContent = uniqueAddresses.size;
+            if (typeof window.updateTotalTabletAmount === "function") window.updateTotalTabletAmount();
         }
+
+        // 依所選牌位金額及消災、超薦數量即時計算總額。
+        window.updateTotalTabletAmount = function() {
+            const selected = document.querySelector('input[name="tabletType"]:checked');
+            const amountEl = selected ? document.querySelector('.tablet-amount[data-tablet-type="' + selected.value + '"]') : null;
+            const amount = amountEl && amountEl.value !== '' ? Math.max(0, Number(amountEl.value) || 0) : 0;
+            const disasterCountValue = Number(document.getElementById('disasterCount').textContent) || 0;
+            const superCountText = document.getElementById('sup_count')?.textContent || '0';
+            const superCountValue = Number.parseInt(superCountText, 10) || 0;
+            const deskAmount = Math.max(0, Number(document.getElementById('sup_deskAmount')?.value) || 0);
+            const quantity = disasterCountValue + superCountValue;
+            const total = amount * quantity + deskAmount;
+            document.getElementById('totalTabletAmount').textContent = 'NT$ ' + total.toLocaleString('zh-TW');
+            document.getElementById('totalTabletAmountDetail').textContent = selected
+                ? `所選種類：${selected.value}；單位金額：NT$ ${amount.toLocaleString('zh-TW')}；牌位數量：${quantity}（消災 ${disasterCountValue} ＋ 超薦 ${superCountValue}）；另加普桌金額：NT$ ${deskAmount.toLocaleString('zh-TW')}。`
+                : '請先選擇牌位種類並輸入金額。';
+        };
+        document.querySelectorAll('input[name="tabletType"]').forEach(el => el.addEventListener('change', window.updateTotalTabletAmount));
+        document.querySelectorAll('.tablet-amount').forEach(el => el.addEventListener('input', window.updateTotalTabletAmount));
+        document.getElementById('sup_deskAmount')?.addEventListener('input', window.updateTotalTabletAmount);
 
         // 縣市／鄉鎮市區選單資料
         const districtOptions = {
@@ -807,7 +920,14 @@
                     disasterEntries.push({name, householdNames, city, district, detailAddress, address, useMainAddress});
                 });
             }
-            return {writerName, writerPhone, tabletType: tablet.value, mainCity, mainDistrict, mainAddress, registrationItems: enableDisaster.checked ? ['消災'] : [], disasterEntries};
+            const selectedAmountEl = document.querySelector('.tablet-amount[data-tablet-type="' + tablet.value + '"]');
+            const tabletUnitAmount = selectedAmountEl && selectedAmountEl.value !== '' ? Number(selectedAmountEl.value) : 0;
+            const disasterCountValue = Number(document.getElementById('disasterCount').textContent) || 0;
+            const superCountValue = Number.parseInt(document.getElementById('sup_count').textContent, 10) || 0;
+            const deskAmount = Math.max(0, Number(document.getElementById('sup_deskAmount')?.value) || 0);
+            const tabletQuantity = disasterCountValue + superCountValue;
+            const totalTabletAmount = tabletUnitAmount * tabletQuantity + deskAmount;
+            return {writerName, writerPhone, tabletType: tablet.value, tabletUnitAmount, disasterCount: disasterCountValue, superCount: superCountValue, deskAmount, tabletQuantity, totalTabletAmount, mainCity, mainDistrict, mainAddress, registrationItems: enableDisaster.checked ? ['消災'] : [], disasterEntries};
         }
 
         submitButton.addEventListener('click', () => {
@@ -851,5 +971,138 @@
             }
         });
     </script>
+
+<script>
+{
+
+const cities=["臺北市","新北市","桃園市","臺中市","臺南市","高雄市","基隆市","新竹市","嘉義市","新竹縣","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","屏東縣","宜蘭縣","花蓮縣","臺東縣","澎湖縣","金門縣","連江縣"];
+const districts={
+"臺北市":["中正區","大同區","中山區","松山區","大安區","萬華區","信義區","士林區","北投區","內湖區","南港區","文山區"],
+"新北市":["板橋區","三重區","中和區","永和區","新莊區","新店區","樹林區","鶯歌區","三峽區","淡水區","汐止區","瑞芳區","土城區","蘆洲區","五股區","泰山區","林口區","深坑區","石碇區","坪林區","三芝區","石門區","八里區","平溪區","雙溪區","貢寮區","金山區","萬里區","烏來區"],
+"桃園市":["桃園區","中壢區","大溪區","楊梅區","蘆竹區","大園區","龜山區","八德區","龍潭區","平鎮區","新屋區","觀音區","復興區"],
+"臺中市":["中區","東區","南區","西區","北區","北屯區","西屯區","南屯區","太平區","大里區","霧峰區","烏日區","豐原區","后里區","石岡區","東勢區","和平區","新社區","潭子區","大雅區","神岡區","大肚區","沙鹿區","龍井區","梧棲區","清水區","大甲區","外埔區","大安區"],
+"臺南市":["中西區","東區","南區","北區","安平區","安南區","永康區","歸仁區","新化區","左鎮區","玉井區","楠西區","南化區","仁德區","關廟區","龍崎區","官田區","麻豆區","佳里區","西港區","七股區","將軍區","學甲區","北門區","新營區","後壁區","白河區","東山區","六甲區","下營區","柳營區","鹽水區","善化區","大內區","山上區","新市區","安定區"],
+"高雄市":["新興區","前金區","苓雅區","鹽埕區","鼓山區","旗津區","前鎮區","三民區","楠梓區","小港區","左營區","仁武區","大社區","岡山區","路竹區","阿蓮區","田寮區","燕巢區","橋頭區","梓官區","彌陀區","永安區","湖內區","鳳山區","大寮區","林園區","鳥松區","大樹區","旗山區","美濃區","六龜區","內門區","杉林區","甲仙區","桃源區","那瑪夏區","茂林區","茄萣區"],
+"基隆市":["仁愛區","信義區","中正區","中山區","安樂區","暖暖區","七堵區"],
+"新竹市":["東區","北區","香山區"],
+"嘉義市":["東區","西區"],
+"新竹縣":["竹北市","竹東鎮","新埔鎮","關西鎮","湖口鄉","新豐鄉","芎林鄉","橫山鄉","北埔鄉","寶山鄉","峨眉鄉","尖石鄉","五峰鄉"],
+"苗栗縣":["苗栗市","苑裡鎮","通霄鎮","竹南鎮","頭份市","後龍鎮","卓蘭鎮","大湖鄉","公館鄉","銅鑼鄉","南庄鄉","頭屋鄉","三義鄉","西湖鄉","造橋鄉","三灣鄉","獅潭鄉","泰安鄉"],
+"彰化縣":["彰化市","員林市","鹿港鎮","和美鎮","北斗鎮","溪湖鎮","田中鎮","二林鎮","線西鄉","伸港鄉","福興鄉","秀水鄉","花壇鄉","芬園鄉","大村鄉","埔鹽鄉","埔心鄉","永靖鄉","社頭鄉","二水鄉","田尾鄉","埤頭鄉","芳苑鄉","大城鄉","竹塘鄉","溪州鄉","芬園鄉"],
+"南投縣":["南投市","埔里鎮","草屯鎮","竹山鎮","集集鎮","名間鄉","鹿谷鄉","中寮鄉","魚池鄉","國姓鄉","水里鄉","信義鄉","仁愛鄉"],
+"雲林縣":["斗六市","斗南鎮","虎尾鎮","西螺鎮","土庫鎮","北港鎮","古坑鄉","大埤鄉","莿桐鄉","林內鄉","二崙鄉","崙背鄉","麥寮鄉","東勢鄉","褒忠鄉","臺西鄉","元長鄉","四湖鄉","口湖鄉","水林鄉"],
+"嘉義縣":["太保市","朴子市","布袋鎮","大林鎮","民雄鄉","溪口鄉","新港鄉","六腳鄉","東石鄉","義竹鄉","鹿草鄉","水上鄉","中埔鄉","竹崎鄉","梅山鄉","番路鄉","大埔鄉","阿里山鄉"],
+"屏東縣":["屏東市","潮州鎮","東港鎮","恆春鎮","萬丹鄉","長治鄉","麟洛鄉","九如鄉","里港鄉","鹽埔鄉","高樹鄉","萬巒鄉","內埔鄉","竹田鄉","新埤鄉","枋寮鄉","新園鄉","崁頂鄉","林邊鄉","南州鄉","佳冬鄉","琉球鄉","車城鄉","滿州鄉","枋山鄉","三地門鄉","霧臺鄉","瑪家鄉","泰武鄉","來義鄉","春日鄉","獅子鄉","牡丹鄉"],
+"宜蘭縣":["宜蘭市","羅東鎮","蘇澳鎮","頭城鎮","礁溪鄉","壯圍鄉","員山鄉","冬山鄉","五結鄉","三星鄉","大同鄉","南澳鄉"],
+"花蓮縣":["花蓮市","鳳林鎮","玉里鎮","新城鄉","吉安鄉","壽豐鄉","光復鄉","豐濱鄉","瑞穗鄉","富里鄉","秀林鄉","萬榮鄉","卓溪鄉"],
+"臺東縣":["臺東市","成功鎮","關山鎮","卑南鄉","鹿野鄉","池上鄉","東河鄉","長濱鄉","太麻里鄉","大武鄉","綠島鄉","海端鄉","延平鄉","金峰鄉","達仁鄉","蘭嶼鄉"],
+"澎湖縣":["馬公市","湖西鄉","白沙鄉","西嶼鄉","望安鄉","七美鄉"],
+"金門縣":["金城鎮","金湖鎮","金沙鎮","金寧鄉","烈嶼鄉","烏坵鄉"],
+"連江縣":["南竿鄉","北竿鄉","莒光鄉","東引鄉"]
+};
+const cats=[
+{name:"個人累世冤親債主",bg:"#FCE8E6",accent:"#B94A48",fields:[["敬薦人","name"]]},
+{name:"累世今生所食所傷眾生",bg:"#FFF0D9",accent:"#A96616",fields:[["敬薦人","name"]]},
+{name:"歷代祖先",bg:"#E8EAFB",accent:"#5359A8",fields:[["祖先姓氏","surname"],["陽上報恩人姓名","benefactor"]]},
+{name:"地祇主",bg:"#E0F2E8",accent:"#287A50",fields:[["敬薦人","name"]]},
+{name:"已過世親人",bg:"#F3E5F5",accent:"#884A91",fields:[["亡者姓名","name"],["陽上報恩人姓名","benefactor"]]},
+{name:"墮胎流產嬰靈、夭折無緣子女",bg:"#FCE4EC",accent:"#AD456B",fields:[["敬薦人","name"]]},
+{name:"其他（寵物）",bg:"#E1F3F8",accent:"#28758B",fields:[["寵物名稱","pet"],["敬薦人姓名","person"]]},
+{name:"普桌",bg:"#FFF8CC",accent:"#887315",fields:[["姓名","name"]]}
+];
+function makeRow(){return {name:"",surname:"",benefactor:"",pet:"",person:"",mode:"main",city:"彰化縣",district:"彰化市",detail:""}}
+const data={};cats.forEach(c=>data[c.name]={checked:false,rows:[makeRow()]});
+function el(tag,attrs={},children=[]){const n=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==="class")n.className=v;else if(k==="text")n.textContent=v;else if(k==="style")Object.assign(n.style,v);else n.setAttribute(k,v)});children.forEach(ch=>n.append(ch));return n}
+function optionSelect(list,value,onchange){const s=el("select");list.forEach(v=>s.append(el("option",{value:v,text:v})));s.value=value;s.addEventListener("change",()=>onchange(s.value));return s}
+function initCitySelect(select,selected){select.innerHTML="";cities.forEach(c=>select.append(el("option",{value:c,text:c})));select.value=selected}
+const mainCity=document.getElementById("mainCity"),mainDistrict=document.getElementById("mainDistrict");
+initCitySelect(mainCity,"彰化縣");
+function refreshMainDistrict(){const arr=districts[mainCity.value]||[];mainDistrict.innerHTML="";arr.forEach(d=>mainDistrict.append(el("option",{value:d,text:d})));}refreshMainDistrict();
+mainCity.addEventListener("change",refreshMainDistrict);
+function addressBlock(row,onchange){
+ const box=el("div",{class:"address"});
+ box.append(el("h3",{text:"住址設定"}));
+ const radios=el("div",{class:"radios"});
+ [["main","使用最上方的主要住址"],["lucky","使用吉祥地住址"],["custom","自行選填住址"]].forEach(([val,label])=>{
+  const id="addr_"+Math.random().toString(36).slice(2);
+  const input=el("input",{type:"radio",name:id,value:val});input.name=id;
+  input.checked=row.mode===val;
+  input.addEventListener("change",()=>{row.mode=val;onchange()});
+  radios.append(el("label",{},[input,document.createTextNode(label)]));
+ });
+ box.append(radios);
+ if(row.mode==="main"){box.append(el("div",{class:"mainaddress",text:`${mainCity.value} ${mainDistrict.value} ${document.getElementById("mainAddress").value||"（尚未填寫詳細地址）"}`}));}
+ else if(row.mode==="lucky"){box.append(el("div",{class:"mainaddress",text:"吉祥地"}));}
+ else {
+  const grid=el("div",{class:"grid2"});
+  const cwrap=el("div");cwrap.append(el("label",{text:"縣市"}));
+  const csel=optionSelect(cities,row.city,v=>{row.city=v;row.district=(districts[v]||[""])[0];renderAll()});cwrap.append(csel);
+  const dwrap=el("div");dwrap.append(el("label",{text:"鄉鎮市區"}));
+  const dlist=districts[row.city]||[]; if(!dlist.includes(row.district)) row.district=dlist[0]||""; const dsel=optionSelect(dlist,row.district,v=>{row.district=v;renderAll()});dwrap.append(dsel);
+  grid.append(cwrap,dwrap);box.append(grid);
+  const lab=el("label",{text:"詳細地址"}),inp=el("input",{value:row.detail,placeholder:"請輸入詳細地址"});
+  inp.value=row.detail;inp.addEventListener("input",()=>row.detail=inp.value);
+  box.append(lab,inp);
+ }
+ return box;
+}
+function renderEntry(cat,index){
+ const row=data[cat.name].rows[index],entry=el("div",{class:"entry"});
+ const top=el("div",{class:"entrytop"});
+ top.append(el("strong",{text:`第 ${index+1} 筆資料`}));
+ if(data[cat.name].rows.length>1){const rm=el("button",{class:"remove",type:"button",text:"刪除此筆"});rm.addEventListener("click",()=>{data[cat.name].rows.splice(index,1);renderAll()});top.append(rm)}
+ entry.append(top);
+ const fields=el("div",{class:"grid2"});
+ cat.fields.forEach(([label,key])=>{
+  const wrap=el("div");wrap.append(el("label",{text:label}));
+  const inp=el("input",{placeholder:"請輸入"+label});inp.value=row[key];
+  inp.addEventListener("input",()=>{row[key]=inp.value;updateCount()});
+  wrap.append(inp);fields.append(wrap);
+ });
+ entry.append(fields,addressBlock(row,renderAll));return entry;
+}
+function renderCategory(cat,index){
+ const state=data[cat.name],box=el("div",{class:"category",style:{background:cat.bg}});
+ const head=el("div",{class:"cathead"});
+ const cb=el("input",{type:"checkbox"});cb.checked=state.checked;cb.addEventListener("change",()=>{state.checked=cb.checked;renderAll()});
+ head.append(cb,el("span",{text:`${index+1}. ${cat.name}`}));box.append(head);
+ if(state.checked){
+  const content=el("div",{class:"catcontent"});
+  state.rows.forEach((_,i)=>content.append(renderEntry(cat,i)));
+  const add=el("button",{class:"add",type:"button",text:"＋ 新增人名及住址設定"});
+  add.addEventListener("click",()=>{state.rows.push(makeRow());renderAll()});
+  content.append(add);box.append(content);
+ }
+ return box;
+}
+function updateCount(){
+ const count=cats.slice(0,7).reduce((sum,cat)=>{
+  if(!data[cat.name].checked)return sum;
+  const key=cat.name==="歷代祖先"||cat.name==="已過世親人"?"benefactor":cat.name==="其他（寵物）"?"person":"name";
+  return sum+data[cat.name].rows.filter(r=>r[key].trim()!=="").length;
+ },0);
+ document.getElementById("sup_count").textContent=count+" 筆";
+ if(typeof window.updateTotalTabletAmount === "function") window.updateTotalTabletAmount();
+}
+function renderAll(){
+ const root=document.getElementById("sup_categories");root.innerHTML="";
+ cats.slice(0,7).forEach((cat,i)=>root.append(renderCategory(cat,i)));
+ const desk=data["普桌"],toggle=document.getElementById("sup_deskToggle"),content=document.getElementById("sup_deskContent");
+ toggle.checked=desk.checked;content.hidden=!desk.checked;content.innerHTML="";
+ if(desk.checked){
+  desk.rows.forEach((_,i)=>content.append(renderEntry(cats[7],i)));
+  const add=el("button",{class:"add",type:"button",text:"＋ 新增人名及住址設定"});add.addEventListener("click",()=>{desk.rows.push(makeRow());renderAll()});content.append(add);
+ }
+ updateCount();
+}
+document.getElementById("sup_deskToggle").addEventListener("change",e=>{data["普桌"].checked=e.target.checked;renderAll()});
+mainCity.addEventListener("change",()=>{document.querySelectorAll(".mainaddress").forEach(n=>{});renderAll()});
+mainDistrict.addEventListener("change",renderAll);
+document.getElementById("mainAddress").addEventListener("input",renderAll);
+renderAll();
+
+}
+</script>
+
 </body>
 </html>
