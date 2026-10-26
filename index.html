@@ -970,16 +970,31 @@
             submitStatus.style.color = '#555';
             transportPayload.value = JSON.stringify(payload);
             transportForm.action = WEB_APP_URL;
-            transportForm.submit();
+            // 先監聽 iframe 的回應；部分瀏覽器／Apps Script 情況下 postMessage 可能遺失，
+            // 但回應頁仍會載入，因此以 iframe load 作為備援，避免誤顯示「尚未收到回覆」。
             clearTimeout(submitTimeout);
+            transportForm.submit();
             submitTimeout = setTimeout(() => {
                 if (!submitInProgress) return;
-                submitStatus.textContent = '尚未收到回覆。請先查看試算表是否已新增資料，確認前請勿重複送出。';
-                submitStatus.style.color = '#b00020';
-                submitButton.disabled = false;
-                submitButton.textContent = '重新送出';
-                submitInProgress = false;
+                // 不允許因為回覆延遲而直接重送，避免同一筆資料重複寫入。
+                submitStatus.textContent = '資料已送出，伺服器回覆較慢。請先查看試算表是否新增資料，請勿直接重複送出。';
+                submitStatus.style.color = '#9a6700';
+                submitButton.disabled = true;
+                submitButton.textContent = '等待確認';
             }, 20000);
+        });
+
+        const responseFrame = document.getElementById('registrationResponseFrame');
+        responseFrame.addEventListener('load', () => {
+            if (!submitInProgress) return;
+            // 若 Apps Script 的 postMessage 沒有抵達，iframe 載入代表已收到 HTTP 回應。
+            // 這裡不宣稱後端儲存成功，只提示確認試算表，並鎖住按鈕避免重複送出。
+            clearTimeout(submitTimeout);
+            submitStatus.textContent = '伺服器已回應。請確認試算表是否新增本次資料；確認前請勿重複送出。';
+            submitStatus.style.color = '#176b37';
+            submitButton.disabled = true;
+            submitButton.textContent = '已送出，請確認';
+            submitInProgress = false;
         });
 
         window.addEventListener('message', event => {
