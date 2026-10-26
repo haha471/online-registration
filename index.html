@@ -444,13 +444,13 @@
                 </div>
 
                 <div class="form-group">
-    <label for="writerPhone">手機號碼</label>
+    <label for="writerPhone">連絡電話</label>
     <input
         type="tel"
         id="writerPhone"
         inputmode="numeric"
         autocomplete="tel"
-        placeholder="請輸入手機號碼"
+        placeholder="請輸入連絡電話"
     >
 </div>
 
@@ -1055,6 +1055,9 @@ const cats=[
 ];
 function makeRow(){return {name:"",surname:"",benefactor:"",pet:"",person:"",mode:"main",city:"彰化縣",district:"彰化市",detail:""}}
 const data={};cats.forEach(c=>data[c.name]={checked:false,rows:[makeRow()]});
+// 普桌額外欄位：聯絡電話與處理方式
+let deskContactPhone = "";
+let deskHandling = "自行領回";
 function el(tag,attrs={},children=[]){const n=document.createElement(tag);Object.entries(attrs).forEach(([k,v])=>{if(k==="class")n.className=v;else if(k==="text")n.textContent=v;else if(k==="style")Object.assign(n.style,v);else n.setAttribute(k,v)});children.forEach(ch=>n.append(ch));return n}
 function optionSelect(list,value,onchange){const s=el("select");list.forEach(v=>s.append(el("option",{value:v,text:v})));s.value=value;s.addEventListener("change",()=>onchange(s.value));return s}
 function initCitySelect(select,selected){select.innerHTML="";cities.forEach(c=>select.append(el("option",{value:c,text:c})));select.value=selected}
@@ -1102,7 +1105,29 @@ function renderEntry(cat,index){
   inp.addEventListener("input",()=>{row[key]=inp.value;updateCount()});
   wrap.append(inp);fields.append(wrap);
  });
- entry.append(fields,addressBlock(row,renderAll));return entry;
+ entry.append(fields);
+ if(cat.name==="普桌"){
+  const contactWrap=el("div",{class:"entry"});
+  contactWrap.append(el("label",{text:"聯絡電話"}));
+  const phoneInput=el("input",{type:"tel",inputmode:"numeric",autocomplete:"tel",placeholder:"請輸入普桌聯絡電話"});
+  phoneInput.value=deskContactPhone;
+  phoneInput.addEventListener("input",()=>{deskContactPhone=phoneInput.value});
+  contactWrap.append(phoneInput);
+  contactWrap.append(el("label",{text:"處理方式"}));
+  const handlingOptions=el("div",{class:"radios"});
+  [
+   ["自行領回","自行領回（當天沒領回將由精舍處理）"],
+   ["精舍處理","精舍處理"]
+  ].forEach(([value,label])=>{
+   const radio=el("input",{type:"radio",name:"deskHandling",value});
+   radio.checked=deskHandling===value;
+   radio.addEventListener("change",()=>{if(radio.checked)deskHandling=value});
+   handlingOptions.append(el("label",{},[radio,document.createTextNode(label)]));
+  });
+  contactWrap.append(handlingOptions);
+  entry.append(contactWrap);
+ }
+ entry.append(addressBlock(row,renderAll));return entry;
 }
 function renderCategory(cat,index){
  const state=data[cat.name],box=el("div",{class:"category",style:{background:cat.bg}});
@@ -1166,6 +1191,8 @@ window.getSuperFormPayload = function() {
   superCategories,
   deskData: {
    checked: Boolean(desk.checked),
+   contactPhone: desk.checked ? deskContactPhone.trim() : "",
+   handling: desk.checked ? deskHandling : "",
    rows: desk.checked ? desk.rows.map(row => ({
     name: row.name || "",
     mode: row.mode || "main",
