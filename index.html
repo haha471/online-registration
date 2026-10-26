@@ -927,7 +927,35 @@
             const deskAmount = Math.max(0, Number(document.getElementById('sup_deskAmount')?.value) || 0);
             const tabletQuantity = disasterCountValue + superCountValue;
             const totalTabletAmount = tabletUnitAmount * tabletQuantity + deskAmount;
-            return {writerName, writerPhone, tabletType: tablet.value, tabletUnitAmount, disasterCount: disasterCountValue, superCount: superCountValue, deskAmount, tabletQuantity, totalTabletAmount, mainCity, mainDistrict, mainAddress, registrationItems: enableDisaster.checked ? ['消災'] : [], disasterEntries};
+            // 從超薦表單取得已勾選類別及各筆人名／住址資料。
+            const superPayload = typeof window.getSuperFormPayload === 'function'
+                ? window.getSuperFormPayload()
+                : {superCategories: [], deskData: {checked: false, rows: []}};
+            const registrationItemsAll = [];
+            if (enableDisaster.checked) registrationItemsAll.push('消災');
+            (superPayload.superCategories || []).forEach(category => {
+                if (category.checked) registrationItemsAll.push(category.name);
+            });
+            if (superPayload.deskData && superPayload.deskData.checked) registrationItemsAll.push('普桌');
+
+            return {
+                writerName,
+                writerPhone,
+                tabletType: tablet.value,
+                tabletUnitAmount,
+                disasterCount: disasterCountValue,
+                superCount: superCountValue,
+                deskAmount,
+                tabletQuantity,
+                totalTabletAmount,
+                mainCity,
+                mainDistrict,
+                mainAddress,
+                registrationItems: registrationItemsAll,
+                disasterEntries,
+                superCategories: superPayload.superCategories || [],
+                deskData: superPayload.deskData || {checked: false, rows: []}
+            };
         }
 
         submitButton.addEventListener('click', () => {
@@ -1099,6 +1127,41 @@ document.getElementById("sup_deskToggle").addEventListener("change",e=>{data["�
 mainCity.addEventListener("change",()=>{document.querySelectorAll(".mainaddress").forEach(n=>{});renderAll()});
 mainDistrict.addEventListener("change",renderAll);
 document.getElementById("mainAddress").addEventListener("input",renderAll);
+
+// 將超薦與普桌表單資料提供給主要送出程式。
+// 只傳送已勾選的類別狀態與欄位內容；不改變畫面上的輸入方式。
+window.getSuperFormPayload = function() {
+ const superCategories = cats.slice(0, 7).map(cat => ({
+  name: cat.name,
+  checked: Boolean(data[cat.name].checked),
+  rows: data[cat.name].checked ? data[cat.name].rows.map(row => ({
+   name: row.name || "",
+   surname: row.surname || "",
+   benefactor: row.benefactor || "",
+   pet: row.pet || "",
+   person: row.person || "",
+   mode: row.mode || "main",
+   city: row.city || "",
+   district: row.district || "",
+   detail: row.detail || ""
+  })) : []
+ }));
+ const desk = data["普桌"];
+ return {
+  superCategories,
+  deskData: {
+   checked: Boolean(desk.checked),
+   rows: desk.checked ? desk.rows.map(row => ({
+    name: row.name || "",
+    mode: row.mode || "main",
+    city: row.city || "",
+    district: row.district || "",
+    detail: row.detail || ""
+   })) : []
+  }
+ };
+};
+
 renderAll();
 
 }
