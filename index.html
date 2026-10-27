@@ -547,7 +547,7 @@
 <div id="sup_categories"></div>
 <div class="stats">
 <div class="statrow"><div><h3>超薦牌位數量統計</h3><div class="muted" style="color:#245A88;margin-top:5px">僅統計前七類指定欄位中已填寫的姓名；普桌不列入統計。</div></div><div class="count" id="sup_count">0 筆</div></div>
-<div class="muted" style="color:#245A88;margin-top:10px;line-height:1.7">統計欄位：前兩類敬薦人、歷代祖先的陽上報恩人姓名、地祇主敬薦人、已過世親人的陽上報恩人姓名、墮胎流產嬰靈及夭折無緣子女的敬薦人、其他（寵物）的敬薦人姓名。</div>
+<div class="muted" style="color:#245A88;margin-top:10px;line-height:1.7">統計欄位：前兩類敬薦人、歷代祖先的陽上報恩人姓名、地祇主敬薦人、已過世親人的陽上報恩人姓名、墮胎流產嬰靈及夭折無緣子女的敬薦人、其他（事件、寵物等）的敬薦人姓名。</div>
 </div>
 <div id="sup_deskSection" class="desk">
 <div class="cathead"><input type="checkbox" id="sup_deskToggle"><label for="sup_deskToggle" style="margin:0;color:#887315">8. 普桌</label><label for="sup_deskAmount" style="margin:0 0 0 12px;color:#887315">普桌金額</label><input type="number" id="sup_deskAmount" min="0" step="1" value="0" aria-label="普桌金額" style="width:120px;max-width:35%;min-height:64px;padding:16px 10px;font-size:18px;border:1px solid #d5bd60;border-radius:8px"></div>
@@ -1058,7 +1058,7 @@ const cats=[
 {name:"地祇主",bg:"#E0F2E8",accent:"#287A50",fields:[["敬薦人","name"]]},
 {name:"已過世親人",bg:"#F3E5F5",accent:"#884A91",fields:[["亡者姓名","name"],["陽上報恩人姓名","benefactor"]]},
 {name:"墮胎流產嬰靈、夭折無緣子女",bg:"#FCE4EC",accent:"#AD456B",fields:[["敬薦人","name"]]},
-{name:"其他（寵物）",bg:"#E1F3F8",accent:"#28758B",fields:[["寵物名稱","pet"],["敬薦人姓名","person"]]},
+{name:"其他（事件、寵物等）",bg:"#E1F3F8",accent:"#28758B",fields:[["寵物名稱","pet"],["敬薦人姓名","person"]]},
 {name:"普桌",bg:"#FFF8CC",accent:"#887315",fields:[["姓名","name"]]}
 ];
 function makeRow(){return {name:"",surname:"",benefactor:"",pet:"",person:"",mode:"main",city:"彰化縣",district:"彰化市",detail:""}}
@@ -1154,7 +1154,7 @@ function renderCategory(cat,index){
 function updateCount(){
  const count=cats.slice(0,7).reduce((sum,cat)=>{
   if(!data[cat.name].checked)return sum;
-  const key=cat.name==="歷代祖先"||cat.name==="已過世親人"?"benefactor":cat.name==="其他（寵物）"?"person":"name";
+  const key=cat.name==="歷代祖先"||cat.name==="已過世親人"?"benefactor":cat.name==="其他（事件、寵物等）"?"person":"name";
   return sum+data[cat.name].rows.filter(r=>r[key].trim()!=="").length;
  },0);
  document.getElementById("sup_count").textContent=count+" 筆";
