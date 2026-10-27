@@ -1073,9 +1073,40 @@ const mainCity=document.getElementById("mainCity"),mainDistrict=document.getElem
 initCitySelect(mainCity,"彰化縣");
 function refreshMainDistrict(){const arr=districts[mainCity.value]||[];mainDistrict.innerHTML="";arr.forEach(d=>mainDistrict.append(el("option",{value:d,text:d})));}refreshMainDistrict();
 mainCity.addEventListener("change",refreshMainDistrict);
+function getAddressIndexItems(currentRow){
+ const items=[];
+ const mainDetail=(document.getElementById("mainAddress").value||"").trim();
+ const mainText=[mainCity.value,mainDistrict.value,mainDetail].filter(Boolean).join("");
+ if(mainDetail && mainText) items.push({label:"主要住址｜"+mainText,mode:"main",city:"",district:"",detail:"",address:mainText});
+ cats.slice(0,7).forEach(cat=>{
+  data[cat.name].rows.forEach((sourceRow,idx)=>{
+   if(sourceRow===currentRow || sourceRow.mode==="lucky") return;
+   let address="",mode=sourceRow.mode||"main",city=sourceRow.city||"",district=sourceRow.district||"",detail=sourceRow.detail||"";
+   if(mode==="main") address=[mainCity.value,mainDistrict.value,(document.getElementById("mainAddress").value||"").trim()].filter(Boolean).join("");
+   else address=[city,district,detail.trim()].filter(Boolean).join("");
+   if(!address || !(mode==="main" ? (document.getElementById("mainAddress").value||"").trim() : detail.trim())) return;
+   items.push({label:cat.name+" 第"+(idx+1)+"筆｜"+address,mode,city,district,detail,address});
+  });
+ });
+ const seen=new Set();
+ return items.filter(item=>{const key=item.address.replace(/\s+/g,"");if(!key||seen.has(key))return false;seen.add(key);return true;});
+}
 function addressBlock(row,onchange){
  const box=el("div",{class:"address"});
  box.append(el("h3",{text:"住址設定"}));
+ const indexItems=getAddressIndexItems(row);
+ const indexLabel=el("label",{text:"住址索引（選擇已填寫的住址並套用）"});
+ const indexSelect=el("select");
+ indexSelect.append(el("option",{value:"",text:indexItems.length?"請選擇要套用的住址":"目前尚無可套用的已填寫住址"}));
+ indexItems.forEach((item,i)=>indexSelect.append(el("option",{value:String(i),text:item.label})));
+ indexSelect.style.width="100%";indexSelect.style.minHeight="42px";indexSelect.style.marginBottom="10px";
+ indexSelect.addEventListener("change",()=>{
+  if(indexSelect.value==="") return;
+  const item=indexItems[Number(indexSelect.value)];if(!item)return;
+  row.mode=item.mode;row.city=item.city;row.district=item.district;row.detail=item.detail;
+  onchange();
+ });
+ box.append(indexLabel,indexSelect);
  const radios=el("div",{class:"radios"});
  [["main","使用最上方的主要住址"],["lucky","使用吉祥地住址"],["custom","自行選填住址"]].forEach(([val,label])=>{
   const id="addr_"+Math.random().toString(36).slice(2);
