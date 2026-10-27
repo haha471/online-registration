@@ -444,13 +444,13 @@
                 </div>
 
                 <div class="form-group">
-    <label for="writerPhone">連絡電話</label>
+    <label for="writerPhone">手機號碼</label>
     <input
         type="tel"
         id="writerPhone"
         inputmode="numeric"
         autocomplete="tel"
-        placeholder="請輸入連絡電話"
+        placeholder="請輸入手機號碼"
     >
 </div>
 
@@ -820,10 +820,14 @@
             const superCountValue = Number.parseInt(superCountText, 10) || 0;
             const deskAmount = Math.max(0, Number(document.getElementById('sup_deskAmount')?.value) || 0);
             const quantity = disasterCountValue + superCountValue;
-            const total = amount * quantity + deskAmount;
+            // 全家牌位是整組固定價格（涵蓋消災＋超薦合計最多 30 支），不按支數重複計價；其他牌位依數量計價。
+            const tabletTotal = selected && selected.value === '全家牌位' ? amount : amount * quantity;
+            const total = tabletTotal + deskAmount;
             document.getElementById('totalTabletAmount').textContent = 'NT$ ' + total.toLocaleString('zh-TW');
             document.getElementById('totalTabletAmountDetail').textContent = selected
-                ? `所選種類：${selected.value}；單位金額：NT$ ${amount.toLocaleString('zh-TW')}；牌位數量：${quantity}（消災 ${disasterCountValue} ＋ 超薦 ${superCountValue}）；另加普桌金額：NT$ ${deskAmount.toLocaleString('zh-TW')}。`
+                ? (selected.value === '全家牌位'
+                    ? `所選種類：全家牌位；整組固定金額：NT$ ${amount.toLocaleString('zh-TW')}（消災 ${disasterCountValue} ＋ 超薦 ${superCountValue}，合計 ${quantity} 支，不按支數另計）；另加普桌金額：NT$ ${deskAmount.toLocaleString('zh-TW')}。`
+                    : `所選種類：${selected.value}；每支金額：NT$ ${amount.toLocaleString('zh-TW')}；牌位數量：${quantity}（消災 ${disasterCountValue} ＋ 超薦 ${superCountValue}）；另加普桌金額：NT$ ${deskAmount.toLocaleString('zh-TW')}。`)
                 : '請先選擇牌位種類並輸入金額。';
         };
         document.querySelectorAll('input[name="tabletType"]').forEach(el => el.addEventListener('change', window.updateTotalTabletAmount));
@@ -926,7 +930,11 @@
             const superCountValue = Number.parseInt(document.getElementById('sup_count').textContent, 10) || 0;
             const deskAmount = Math.max(0, Number(document.getElementById('sup_deskAmount')?.value) || 0);
             const tabletQuantity = disasterCountValue + superCountValue;
-            const totalTabletAmount = tabletUnitAmount * tabletQuantity + deskAmount;
+            // 全家牌位以整組固定價格計算，其餘牌位才依消災＋超薦支數計價。
+            const tabletTotalAmount = tablet.value === '全家牌位'
+                ? tabletUnitAmount
+                : tabletUnitAmount * tabletQuantity;
+            const totalTabletAmount = tabletTotalAmount + deskAmount;
             // 從超薦表單取得已勾選類別及各筆人名／住址資料。
             const superPayload = typeof window.getSuperFormPayload === 'function'
                 ? window.getSuperFormPayload()
