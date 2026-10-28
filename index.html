@@ -1131,6 +1131,43 @@ function addressBlock(row,onchange){
  }
  return box;
 }
+// 本次填表期間的姓名索引：只在目前表單已輸入的姓名欄位間互相套用，不讀取歷史資料。
+const nameIndexFields = new Set([
+ "個人累世冤親債主|name",
+ "累世今生所食所傷眾生|name",
+ "歷代祖先|benefactor",
+ "地祇主|name",
+ "已過世親人|benefactor",
+ "墮胎流產嬰靈、夭折無緣子女|name",
+ "其他（事件、寵物等）|person",
+ "普桌|name"
+]);
+function getCurrentFormNames(){
+ const result=[]; const seen=new Set();
+ cats.forEach(cat=>{
+  const state=data[cat.name];
+  if(!state || !state.checked) return;
+  state.rows.forEach(row=>{
+   cat.fields.forEach(([label,key])=>{
+    if(!nameIndexFields.has(cat.name+"|"+key)) return;
+    const name=String(row[key]||"").trim();
+    if(name && !seen.has(name)){seen.add(name);result.push(name)}
+   });
+  });
+ });
+ return result;
+}
+function refreshNameIndexSelects(){
+ const names=getCurrentFormNames();
+ document.querySelectorAll("select.session-name-index").forEach(select=>{
+  const current=select.dataset.currentValue||"";
+  select.innerHTML="";
+  select.append(el("option",{value:"",text:names.length?"選擇本次已填寫的姓名並套用":"尚無其他已填寫姓名"}));
+  names.forEach(name=>select.append(el("option",{value:name,text:name})));
+  select.value="";
+  if(current && names.includes(current)) select.dataset.currentValue=current;
+ });
+}
 function renderEntry(cat,index){
  const row=data[cat.name].rows[index],entry=el("div",{class:"entry"});
  const top=el("div",{class:"entrytop"});
@@ -1141,8 +1178,21 @@ function renderEntry(cat,index){
  cat.fields.forEach(([label,key])=>{
   const wrap=el("div");wrap.append(el("label",{text:label}));
   const inp=el("input",{placeholder:"請輸入"+label});inp.value=row[key];
-  inp.addEventListener("input",()=>{row[key]=inp.value;updateCount()});
-  wrap.append(inp);fields.append(wrap);
+  inp.addEventListener("input",()=>{row[key]=inp.value;updateCount();refreshNameIndexSelects()});
+  wrap.append(inp);
+  if(nameIndexFields.has(cat.name+"|"+key)){
+   const nameSelect=el("select",{class:"session-name-index"});
+   nameSelect.style.width="100%";nameSelect.style.minHeight="38px";nameSelect.style.marginTop="6px";
+   nameSelect.append(el("option",{value:"",text:"載入本次表單已填寫的姓名…"}));
+   nameSelect.addEventListener("change",()=>{
+    const selected=nameSelect.value;
+    if(!selected)return;
+    row[key]=selected;inp.value=selected;nameSelect.value="";
+    updateCount();refreshNameIndexSelects();
+   });
+   wrap.append(nameSelect);
+  }
+  fields.append(wrap);
  });
  entry.append(fields);
  if(cat.name==="普桌"){
@@ -1201,6 +1251,7 @@ function renderAll(){
   const add=el("button",{class:"add",type:"button",text:"＋ 新增人名及住址設定"});add.addEventListener("click",()=>{desk.rows.push(makeRow());renderAll()});content.append(add);
  }
  updateCount();
+ refreshNameIndexSelects();
 }
 document.getElementById("sup_deskToggle").addEventListener("change",e=>{data["普桌"].checked=e.target.checked;renderAll()});
 mainCity.addEventListener("change",()=>{document.querySelectorAll(".mainaddress").forEach(n=>{});renderAll()});
