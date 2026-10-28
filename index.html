@@ -1248,5 +1248,54 @@ renderAll();
 }
 </script>
 
+
+<div id="nameIndexModal" class="name-index-modal" hidden role="dialog" aria-modal="true" aria-labelledby="nameIndexTitle">
+  <div class="name-index-panel">
+    <h2 id="nameIndexTitle">選擇歷史姓名</h2>
+    <input id="nameIndexSearch" class="name-index-search" type="search" placeholder="輸入姓名搜尋" autocomplete="off">
+    <div id="nameIndexStatus" class="name-index-status">正在載入歷史姓名…</div>
+    <div id="nameIndexList" class="name-index-list"></div>
+    <div class="name-index-footer"><span class="name-index-status">選取後會填入目前欄位</span><button type="button" id="nameIndexClose" class="name-index-close">關閉</button></div>
+  </div>
+</div>
+<script>
+(function(){
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzlXWZ32YgkcOGkkHdEoJ03f3dl0Br8ezB2vB613_MbNLLzuDctMRaJhMzctQwf6cPo/exec";
+  const modal=document.getElementById('nameIndexModal'), search=document.getElementById('nameIndexSearch'), list=document.getElementById('nameIndexList'), status=document.getElementById('nameIndexStatus');
+  let names=[], targetInput=null, loading=false;
+  function eligible(input){
+    if(!input || input.tagName!=='INPUT' || input.type==='checkbox' || input.type==='radio') return false;
+    return input.id==='writerName' || input.classList.contains('disaster-name') || input.classList.contains('same-household-names') || input.closest('#superForm') && input.type==='text' && !/電話|地址/.test(input.placeholder||'');
+  }
+  function draw(){
+    const q=(search.value||'').trim().toLocaleLowerCase();
+    const filtered=names.filter(n=>n.toLocaleLowerCase().includes(q)).slice(0,250);
+    list.replaceChildren();
+    if(!filtered.length){status.textContent=names.length?'找不到符合的姓名。':'目前尚無歷史姓名。';return;}
+    status.textContent=`找到 ${filtered.length}${q?' 筆符合結果':' 筆姓名（最多顯示 250 筆，請輸入關鍵字縮小範圍）'}`;
+    filtered.forEach(name=>{const b=document.createElement('button');b.type='button';b.className='name-index-item';b.textContent=name;b.addEventListener('click',()=>{if(targetInput){targetInput.value=name;targetInput.dispatchEvent(new Event('input',{bubbles:true}));targetInput.dispatchEvent(new Event('change',{bubbles:true}));targetInput.focus();}close();});list.appendChild(b);});
+  }
+  function loadNames(){
+    if(names.length){draw();return;}
+    if(loading)return;loading=true;status.textContent='正在載入歷史姓名…';
+    const callback='sandeNameIndex_'+Date.now()+'_'+Math.floor(Math.random()*1000000);
+    const script=document.createElement('script');
+    const cleanup=()=>{loading=false;try{delete window[callback];}catch(e){window[callback]=undefined;}script.remove();};
+    const timer=setTimeout(()=>{cleanup();status.textContent='載入逾時，請稍後再試。';},12000);
+    window[callback]=data=>{clearTimeout(timer);cleanup();names=Array.isArray(data)?data.filter(v=>typeof v==='string'&&v.trim()):[];draw();};
+    script.onerror=()=>{clearTimeout(timer);cleanup();status.textContent='姓名索引載入失敗，請檢查 Apps Script 部署版本。';};
+    script.src=WEB_APP_URL+'?mode=nameIndex&callback='+encodeURIComponent(callback)+'&t='+Date.now();document.head.appendChild(script);
+  }
+  function open(input){targetInput=input;modal.hidden=false;search.value='';loadNames();if(names.length)draw();setTimeout(()=>search.focus(),50);}
+  function close(){modal.hidden=true;targetInput=null;}
+  function addButton(input){if(!eligible(input)||input.dataset.nameIndexReady==='1')return;input.dataset.nameIndexReady='1';const b=document.createElement('button');b.type='button';b.className='name-index-button';b.textContent='選擇姓名';b.addEventListener('click',()=>open(input));input.insertAdjacentElement('afterend',b);}
+  function scan(root){if(root.matches&&root.matches('input'))addButton(root);if(root.querySelectorAll)root.querySelectorAll('input').forEach(addButton);}
+  scan(document);
+  new MutationObserver(records=>records.forEach(r=>r.addedNodes.forEach(n=>{if(n.nodeType===1)scan(n);}))).observe(document.body,{childList:true,subtree:true});
+  search.addEventListener('input',draw);document.getElementById('nameIndexClose').addEventListener('click',close);
+  modal.addEventListener('click',e=>{if(e.target===modal)close();});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)close();});
+})();
+</script>
+
 </body>
 </html>
